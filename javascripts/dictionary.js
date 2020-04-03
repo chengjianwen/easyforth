@@ -4,12 +4,11 @@ function Dictionary() {
   function add(name, definition) {
     // The dict is searched from beginning to end, so new definitions
     // need to be unshifted.
-    dict.unshift([name.toLowerCase(), definition]);
+    dict.unshift([name, definition]);
   }
 
   // Missing key returns null
   function lookup(key) {
-    key = key.toLowerCase();
     var item = dict.find(function (item) {
       return item[0] === key;
     });

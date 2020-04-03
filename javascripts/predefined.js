@@ -21,55 +21,55 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     return "\n" + context.stack.print();
   });
 
-  addToDictionary("+", function (context) {
+  addToDictionary("和", function (context) {
     context.stack.push(context.stack.pop() + context.stack.pop());
   });
 
-  addToDictionary("-", function (context) {
+  addToDictionary("差", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b - a);
   });
 
-  addToDictionary("*", function (context) {
+  addToDictionary("积", function (context) {
     context.stack.push(context.stack.pop() * context.stack.pop());
   });
 
-  addToDictionary("/", function (context) {
+  addToDictionary("商", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(Math.floor(b / a));
   });
 
-  addToDictionary("/mod", function (context) {
+  addToDictionary("除", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(Math.floor(b % a));
     context.stack.push(Math.floor(b / a));
   });
 
-  addToDictionary("mod", function (context) {
+  addToDictionary("余", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(Math.floor(b % a));
   });
 
-  addToDictionary("=", function (context) {
+  addToDictionary("同", function (context) {
     context.stack.push(context.stack.pop() === context.stack.pop() ? TRUE : FALSE);
   });
 
-  addToDictionary("<", function (context) {
+  addToDictionary("小", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b < a ? TRUE : FALSE);
   });
 
-  addToDictionary(">", function (context) {
+  addToDictionary("大", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b > a ? TRUE : FALSE);
   });
 
-  addToDictionary("and", function (context) {
+  addToDictionary("且", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b & a);
   });
 
-  addToDictionary("or", function (context) {
+  addToDictionary("或", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b | a);
   });
@@ -105,19 +105,19 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     return String.fromCharCode(context.stack.pop());
   });
 
-  addToDictionary("swap", function (context) {
+  addToDictionary("换", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(a);
     context.stack.push(b);
   });
 
-  addToDictionary("dup", function (context) {
+  addToDictionary("重", function (context) {
     var a = context.stack.pop();
     context.stack.push(a);
     context.stack.push(a);
   });
 
-  addToDictionary("over", function (context) {
+  addToDictionary("倒", function (context) {
     var a = context.stack.pop(), b = context.stack.pop();
     context.stack.push(b);
     context.stack.push(a);
@@ -131,18 +131,18 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(c);
   });
 
-  addToDictionary("drop", function (context) {
+  addToDictionary("弃", function (context) {
     context.stack.pop();
   });
 
-  addToDictionary("!", function (context) {
+  addToDictionary("置", function (context) {
     var address = context.stack.pop();
     var value = context.stack.pop();
     context.memory.setValue(address, value);
     context.onMemoryChange && context.onMemoryChange(address, value);
   });
 
-  addToDictionary("@", function (context) {
+  addToDictionary("取", function (context) {
     var address = context.stack.pop();
     context.stack.push(context.memory.getValue(address));
   });
@@ -163,7 +163,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     };
   });
 
-  addToDictionary("sleep", function (context) {
+  addToDictionary("休", function (context) {
     var timeout = context.stack.pop();
     context.pause = true;
 
