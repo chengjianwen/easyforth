@@ -16,41 +16,28 @@ layout: default
 
 这本手册包括了一个简单的基于JavaScript实现的Forth I。它显然并不完美，缺少很多Forth系统中应该有的功能。它唯一的作用就是能够让你很容易的进行示例演示（如果你非常熟悉Forth，请[移步到这里](https://github.com/skilldrick/easyforth)以获得更好的体验。
 
-I'm going to assume that you know at least one other programming language, and have
-a basic idea of how stacks work as a data structure.
+本书假设你已经学习过其它至少一门编程语言，对堆栈这种数据结构已经有了最基本的了解。
 
+## 输入一些值
 
-## Adding Some Numbers
+Forth与其它编程语言的区别在于堆栈的使用。在Forth中，一切都是围绕着堆栈工作。任何时候你输入一个数值，它就会被放入堆栈中。如果你想将两个数值相加，输入“+”可以将堆栈最上面的两个数值取出来进行相加，然后将结果再放入堆栈。
 
-The thing that separates Forth from most other languages is its use of the
-stack. In Forth, everything revolves around the stack. Any time you type a
-number, it gets pushed onto the stack. If you want to add two numbers together,
-typing `+` takes the top two numbers off the stack, adds them, and puts
-the result back on the stack.
-
-Let's take a look at an example. Type (don't copy-paste) the following into the
-interpreter, typing `Enter` after each line.
-
+我们可以来看一个例子。把下面的内容输入（不能拷贝/粘贴）到解释器中，在每一行的最后按“回车”键。
     1
     2
     3
 
 {% include editor.html %}
 
-Every time you type a line followed by the `Enter` key, the Forth interpreter
-executes that line, and appends the string `ok` to let you know there were no
-errors. You should also notice that as you execute each line, the area at the
-top fills up with numbers. That area is our visualization of the stack. It
-should look like this:
+每次你通过“回车”键输入一行，Forth解释器就会执行这一行内容，然后会有一句“完成”告诉你没有发生错误。在执行每一行内容时，你还应该注意到最上面一行不断得在补充数字，它就是Forth中堆栈的当前状态，它看起来应该是这样的：
 
 {% include stack.html stack="1 2 3" %}
 
-Now, into the same interpreter, type a single `+` followed by the `Enter` key. The top two
-elements on the stack, `2` and `3`, have been replaced by `5`.
+现在，仍然在这个解释器里，输入“和”然后按“回车”键，堆栈最外面的两个值，“2”和“3”，就会被“5”替代。
 
 {% include stack.html stack="1 5" %}
 
-At this point, your editor window should look like this:
+这个时候，你的编辑器窗口应该是这个样子：
 
 <div class="editor-preview editor-text">1  <span class="output">ok</span>
 2  <span class="output">ok</span>
@@ -58,101 +45,65 @@ At this point, your editor window should look like this:
 +  <span class="output">ok</span>
 </div>
 
-Type `+` again and press `Enter`, and the top two elements will be replaced by 6. If
-you type `+` one more time, Forth will try to pop the top two elements off the
-stack, even though there's only _one_ element on the stack! This results in a
-`Stack underflow` error:
+再次输入“和”，并按“回车”键，最外面的两个值会被替换为6。如果你输入更多的“和”，尽管堆栈中只有一个值，Forth仍然会试图从堆栈中获取两个值，这样就会产生“堆栈已空”的错误：
 
 <div class="editor-preview editor-text">1  <span class="output">ok</span>
 2  <span class="output">ok</span>
 3  <span class="output">ok</span>
 +  <span class="output">ok</span>
 +  <span class="output">ok</span>
-+  <span class="output">Stack underflow</span>
++  <span class="output">堆栈已空</span>
 </div>
 
-Forth doesn't force you to type every token as a separate line. Type the
-following into the next editor, followed by the `Enter` key:
+Forth不是必须把每个要输入的值作为单独的一行进行输入。在下面的编辑器中，输入下面的内容，并按“回车”键：
 
     123 456 +
 
 {% include editor.html size="small"%}
 
-The stack should now look like this:
+现在堆栈的状态应该显示为：
 
 {% include stack.html stack="579" %}
 
-This style, where the operator appears after the operands, is known as
-[Reverse-Polish
-notation](https://en.wikipedia.org/wiki/Reverse_Polish_notation). Let's try
-something a bit more complicated, and calculate `10 * (5 + 2)`. Type the
-following into the interpreter:
+这种操作符位于操作数之后的形式被成为[逆波兰表示法](https://zh.wikipedia.org/wiki/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E7%A4%BA%E6%B3%95)。让我们试一些更为复杂的例子，比如计算“10 * (5 + 2)”。在解释器中输入下面的内容：
 
     5 2 + 10 *
 
 {% include editor.html size="small"%}
 
-One of the nice things about Forth is that the order of operations is
-completely based on their order in the program. For example, when executing `5
-2 + 10 *`, the interpreter pushes 5 to the stack, then 2, then adds them and
-pushes the resulting 7, then pushes 10 to the stack, then multiplies 7 and 10.
-Because of this, there's no need for parentheses to group operators with lower
-precedence.
+Forth的一个优点在于执行的顺序完全按照先后顺序进行。例如当执行“5 2 + 10 *”时，解释器先将5放入堆栈，然后是2，然后将它们相加，并将结果7放入堆栈，然后放入10，然后将7和10相乘。因此，不需要使用括号这样的符号将语句进行分组。
 
-### Stack Effects
+### 堆栈差异
 
-Most Forth words affect the stack in some way. Some take values off the stack,
-some leave new values on the stack, and some do a mixture of both. These "stack
-effects" are commonly represented using comments of the form `( before -- after
-)`. For example, `+` is `( n1 n2 -- sum )` - `n1` and `n2` are the top two numbers
-on the stack, and `sum` is the value left on the stack.
+大多数的Forth操作字会以各自的方式影响到堆栈的内容，一些从堆栈中取走值，一些把新的值放入堆栈，还有一些两者兼具。这些“堆栈差异”一般会用“(前 -- 后)”的形式来表示。例如“+”的堆栈差异为“(值 值 -- 值)”——位于“--”之前的两个值是堆栈最外面的两个值，“--”之后的值则是最后留在堆栈中的值。
 
+## 字定义
 
-## Defining Words
+Forth的语法非常简单。Forth代码被解释为一系列用空格分隔的字。几乎所有不是空格的符号都可以作为字来使用。当Forth解释器读取一个字时，它在内部的一个众所周知的字典中查找是否存在这个字的定义。如果找到这个字的定义，那它就会被执行。否则，这个字就会试图被作为一个值被放入堆栈，如果失败，就会发生错误。
 
-The syntax of Forth is extremely straightforward. Forth code is interpreted as
-a series of space-delimited words. Almost all non-whitespace characters are valid
-in words. When the Forth interpreter reads a word, it checks to see if a
-definition exists in an internal structure known as the Dictionary. If it is
-found, that definition is executed. Otherwise, the word is assumed to be a
-number, and it is pushed onto the stack. If the word cannot be converted to a
-number, an error occurs.
-
-You can try that out yourself below. Type `foo` (an unrecognized word)
-and press enter.
+你可以在下面试一下，输入“晕”（一个未经定义的字）然后按“回车”键。
 
 {% include editor.html size="small"%}
 
-You should see something like this:
+你就会看到这样的结果：
 
-<div class="editor-preview editor-text">foo  <span class="output">foo ?</span></div>
+<div class="editor-preview editor-text">晕  <span class="output">晕 ?</span></div>
 
-`foo ?` means that Forth was unable to find a definition for `foo`, and it
-wasn't a valid number.
+“晕 ?”的意思是Forth没有找到“晕”字的定义，而且它也不是一个数值。
 
-We can create our own definition of `foo` using two special words called `:`
-(colon) and `;` (semicolon).  `:` is our way of telling Forth we want to create
-a definition. The first word after the `:` becomes the definition name, and the
-rest of the words (until the `;`) make up the body of the definition. It's
-conventional to include two spaces between the name and the body of the
-definition. Try entering the following:
+我们可以用“:”（冒号）和“;”（分号）为“晕”创建一个定义。“:”告诉Forth我们想定义一个新的字，其后的第一个字就是需要定义的新字，其余的内容（截止至“;”为止）就是为它定义的内容。通常我们在所定义的字和定义的内容之间用两个空格进行分隔。试一下下面的语句：
 
-    : foo  100 + ;
-    1000 foo
-    foo foo foo
+    : 晕  100 + ;
+    1000 晕
+    晕 晕 晕
 
-**Warning:** A common mistake is to miss out the space before the `;` word. Because Forth
-words are space delimited and can contain most characters, `+;` is a perfectly
-valid word and is not parsed as two separate words.
+**警告:** 一个常见的错误是“;”前面一定要有空格，因为Forth中的字需要用空格分隔，很多符号可以作为字来使用，而“+;”就是一个合法的字，所以它不会被解释为两个字。
 
 {% include editor.html size="small"%}
 
-As you've hopefully figured out, our `foo` word simply adds 100 to the value on
-top of the stack. It's not very interesting, but it should give you an idea of
-how simple definitions work.
+正如你希望的那样，“晕”字仅仅是给堆栈最外面的值增加100。尽管很简单，但它能够让你明白定义一个新的字是如何运行的。
 
-
-## Stack Manipulation
+## 堆栈管理
 
 Now we can start taking a look at some of Forth's predefined words. First,
 let's look at some words for manipulating the elements at the top of the stack.
