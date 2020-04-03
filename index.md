@@ -8,24 +8,13 @@ layout: default
 </div>
 
 
-## Introduction
+## 介绍
 
-This small ebook is here to teach you a programming language called Forth. Forth is a
-language unlike most others. It's not functional _or_ object oriented, it doesn't
-have type-checking, and it basically has zero syntax. It was written in the 70s, but
-is still used today for
-[certain applications](http://www.forth.com/resources/apps/more-applications.html).
+这本小手册指导你来学习一门新的编程语言：Forth。Forth是一门不同于其它语言的编程语言，它既不是函数式，也不是面向对象的，它没有类型检查，它甚至没有任何语法可言。它产生于上个世纪的七十年代，现在仍然在[这些领域](http://www.forth.com/resources/apps/more-applications.html)使用。
 
-Why would you want to learn such an odd language? Every new programming
-language you learn helps you think about problems in new ways. Forth is very
-easy to learn, but it requires you to think in a different way than you're used
-to. That makes it a perfect language to broaden your coding horizons.
+为什么你需要学习一门新的语言？因为每一门新的编程语言都会教给你如何用新的角度来思考问题。Forth不但很容易学习，而且它教给了你用不同于以往所有的角度来思考问题，它是一门能够拓展你编程思路的优秀语言。
 
-This book includes a simple implementation of Forth I wrote in JavaScript. It's by
-no means perfect, and is missing a lot of the functionality you'd expect in a real
-Forth system. It's just here to give you an easy way to try out the examples. (If
-you're a Forth expert, please
-[contribute here](https://github.com/skilldrick/easyforth) and make it better!)
+这本手册包括了一个简单的基于JavaScript实现的Forth I。它显然并不完美，缺少很多Forth系统中应该有的功能。它唯一的作用就是能够让你很容易的进行示例演示（如果你非常熟悉Forth，请[移步到这里](https://github.com/skilldrick/easyforth)以获得更好的体验。
 
 I'm going to assume that you know at least one other programming language, and have
 a basic idea of how stacks work as a data structure.
