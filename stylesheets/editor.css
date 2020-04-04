@@ -1,5 +1,6 @@
 .editor-text {
   font: 14px monospace;
+  background-color: #0000FF;
 }
 
 .editor {
@@ -8,6 +9,10 @@
   border: 1px solid #888;
   margin-bottom: 20px;
   position: relative;
+}
+
+.stack-viewer {
+  background-color: #FF0000;
 }
 
 .editor.has-canvas .text,
@@ -49,6 +54,10 @@
   margin-bottom: 20px;
   white-space: pre-wrap;
   line-height: 1.5em;
+}
+
+.prev-lines {
+  background-color: #00FF00;
 }
 
 /* newlines in output will be treated like new paragraphs */
