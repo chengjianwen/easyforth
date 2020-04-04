@@ -1,5 +1,5 @@
 function StackUnderflowError() {
-  this.message = "Stack underflow";
+  this.message = "栈已空";
 }
 
 function Stack(name) {
@@ -17,12 +17,12 @@ function Stack(name) {
       if (arr.length > 0) {
         return arr.pop();
       } else {
-        console.warn("Stack underflow in " + name);
+        console.warn("取“" + name + "”时发现栈已空");
         throw new StackUnderflowError();
       }
     },
     print: function () {
-      return arr.join(" ") + " <- Top ";
+      return arr.join(" ") + " &lattr 外 ";
     }
   };
 }
