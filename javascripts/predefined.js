@@ -74,7 +74,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(b | a);
   });
 
-  addToDictionary("invert", function (context) {
+  addToDictionary("非", function (context) {
     // invert is bitwise not
     context.stack.push(~context.stack.pop());
   });
@@ -101,7 +101,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(context.returnStack.pop());
   });
 
-  addToDictionary("emit", function (context) {
+  addToDictionary("字", function (context) {
     return String.fromCharCode(context.stack.pop());
   });
 

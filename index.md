@@ -30,7 +30,7 @@ Forth是一个非常简单的，甚至没有什么语法定义的语言，它将
 
 ## 输入一些值
 
-Forth与其它编程语言的区别在于栈的使用。在Forth中，一切都是围绕着栈工作。任何时候你输入一个数值，它就会被放入栈中。如果你想将两个数值相加，那么输入“和”就可以将栈最外面的两个值取出来进行相加，然后将结果再放入栈中。
+Forth与其它编程语言的区别在于它对栈的使用。在Forth中，一切都是围绕着栈进行。任何时候你输入一个值，它就会被放入栈中。如果你想将两个值相加，那么输入“和”（这是一个令）就可以将栈最后面的两个值取出来进行相加，然后将结果再放入栈中。
 
 我们可以来看一个例子。把下面的内容依次输入（不能拷贝/粘贴）到解释器中，在每一行的最后按“回车”键。
 
@@ -40,35 +40,35 @@ Forth与其它编程语言的区别在于栈的使用。在Forth中，一切都�
 
 {% include editor.html %}
 
-每次你通过“回车”键输入一行，Forth解释器就会执行这一行内容，然后会有一句“完成”告诉你没有发生错误。在执行每一行内容时，你还应该注意到最上面一行不断得在补充数字，它就是Forth中堆栈的当前状态，它看起来应该是这样的：
+每次你通过“回车”键输入一行，Forth解释器就会执行这一行中的内容，然后会有一句“完成”告诉你没有发生错误。在执行每一行内容时，你还应该注意到最上面的一行内容在不断得发生变化，它就是Forth中栈的当前状态，它看起来应该是这样的：
 
 {% include stack.html stack="1 2 3" %}
 
-现在，仍然在这个解释器里，输入“和”然后按“回车”键，堆栈最外面的两个值，“2”和“3”，就会被“5”替代。
+继续在这个解释器里输入令字“和”，然后按“回车”键，栈最后面的两个值“2”和“3”，就会被“5”替代。
 
 {% include stack.html stack="1 5" %}
 
 这个时候，你的编辑器窗口应该是这个样子：
 
-<div class="editor-preview editor-text">1  <span class="output">ok</span>
-2  <span class="output">ok</span>
-3  <span class="output">ok</span>
-+  <span class="output">ok</span>
+<div class="editor-preview editor-text">1  <span class="output">完成</span>
+2  <span class="output">完成</span>
+3  <span class="output">完成</span>
++  <span class="output">完成</span>
 </div>
 
-再次输入“和”，并按“回车”键，最外面的两个值会被替换为6。如果你输入更多的“和”，尽管堆栈中只有一个值，Forth仍然会试图从堆栈中获取两个值，这样就会产生“堆栈已空”的错误：
+再次输入“和”，并按“回车”键，最后面的两个值会又被替换为6。如果你输入更多的“和”，尽管堆栈中只剩一个值，Forth仍然会试图从堆栈中获取两个值，这样就会产生“栈已空”的错误：
 
-<div class="editor-preview editor-text">1  <span class="output">ok</span>
-2  <span class="output">ok</span>
-3  <span class="output">ok</span>
-+  <span class="output">ok</span>
-+  <span class="output">ok</span>
-+  <span class="output">堆栈已空</span>
+<div class="editor-preview editor-text">1  <span class="output">完成</span>
+2  <span class="output">完成</span>
+3  <span class="output">完成</span>
++  <span class="output">完成</span>
++  <span class="output">完成</span>
++  <span class="output">栈已空</span>
 </div>
 
 Forth不是必须把每个要输入的值作为单独的一行进行输入。在下面的编辑器中，输入下面的内容，并按“回车”键：
 
-    123 456 +
+    123 456 和
 
 {% include editor.html size="small"%}
 
@@ -76,582 +76,488 @@ Forth不是必须把每个要输入的值作为单独的一行进行输入。在
 
 {% include stack.html stack="579" %}
 
-这种操作符位于操作数之后的形式被成为[逆波兰表示法](https://zh.wikipedia.org/wiki/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E7%A4%BA%E6%B3%95)。让我们试一些更为复杂的例子，比如计算“10 * (5 + 2)”。在解释器中输入下面的内容：
+我们可以看一些更为复杂的例子，比如计算“10 × (5 + 2)”。在解释器中输入下面的内容：
 
-    5 2 + 10 *
+    5
+    2
+    和
+    10
+    积
 
 {% include editor.html size="small"%}
 
-Forth的一个优点在于执行的顺序完全按照先后顺序进行。例如当执行“5 2 + 10 *”时，解释器先将5放入堆栈，然后是2，然后将它们相加，并将结果7放入堆栈，然后放入10，然后将7和10相乘。因此，不需要使用括号这样的符号将语句进行分组。
+Forth完全按照输入的顺序执行。例如当执行“5 2 和 10 积”时，解释器先将5入栈，然后再将2入栈，然后将它们出栈相加，并将结果7入栈，然后将10入栈，然后将7和10出栈并相乘，并将结果70入栈。因此，在Forth中永远不需要使用括号这样将语句进行分组的内容。
 
-### 堆栈差异
+### 栈情
 
-大多数的Forth操作字会以各自的方式影响到堆栈的内容，一些从堆栈中取走值，一些把新的值放入堆栈，还有一些两者兼具。这些“堆栈差异”一般会用“(前 -- 后)”的形式来表示。例如“+”的堆栈差异为“(值 值 -- 值)”——位于“--”之前的两个值是堆栈最外面的两个值，“--”之后的值则是最后留在堆栈中的值。
+大多数的Forth令会对栈进行操作，有些令需要出栈，而有些则需要入栈，还有一些既要出栈还要入栈。这些“栈情”我们用“(出栈|入栈)”的方式来表示。例如“和”的栈情为“(值值|值)”。位于“|”之前有两个“值”，这表示“和”需要出栈两个值，“|”之后有一个“值”，这表示“和”需要入栈一个值。
 
-## 字定义
+## 令规
 
-Forth的语法非常简单。Forth代码被解释为一系列用空格分隔的字。几乎所有不是空格的符号都可以作为字来使用。当Forth解释器读取一个字时，它在内部的一个众所周知的字典中查找是否存在这个字的定义。如果找到这个字的定义，那它就会被执行。否则，这个字就会试图被作为一个值被放入堆栈，如果失败，就会发生错误。
+Forth的规则非常简单，它的内容被解释为按行分隔的值或者令。所有字都可以作为令来使用。当Forth解释器读取到一个字时，它在内部的规典中查找是否存在这个字的令规。如果找到这个字的令规，那这个字的令规就会被执行；如果失败，就会发生错误。
 
-你可以在下面试一下，输入“晕”（一个未经定义的字）然后按“回车”键。
+你可以在下面试着输入“晕”（一个没有令规的字）然后按“回车”键。
 
 {% include editor.html size="small"%}
 
 你就会看到这样的结果：
 
-<div class="editor-preview editor-text">晕  <span class="output">晕 ?</span></div>
+<div class="editor-preview editor-text">晕  <span class="output">晕 未定义</span></div>
 
-“晕 ?”的意思是Forth没有找到“晕”字的定义，而且它也不是一个数值。
+“晕 不存在”的意思是Forth没有找到“晕”的令规。
 
-我们可以用“:”（冒号）和“;”（分号）为“晕”创建一个定义。“:”告诉Forth我们想定义一个新的字，其后的第一个字就是需要定义的新字，其余的内容（截止至“;”为止）就是为它定义的内容。通常我们在所定义的字和定义的内容之间用两个空格进行分隔。试一下下面的语句：
+我们可以用“令”和“。”为“晕”进行令规定义。“令”告诉Forth我们要定义一个新的令规，其后的第一个字就是需要定义令规的字，剩下的内容（直到“。”为止）就是为它定义的内容。通常我们将所定义的内容前面加一些缩进。试一下下面的语句：
 
-    : 晕  100 + ;
-    1000 晕
-    晕 晕 晕
-
-**警告:** 一个常见的错误是“;”前面一定要有空格，因为Forth中的字需要用空格分隔，很多符号可以作为字来使用，而“+;”就是一个合法的字，所以它不会被解释为两个字。
+    令晕
+       100
+       和
+    。
+    1000
+    晕
+    晕
+    晕
+    晕
 
 {% include editor.html size="small"%}
 
-正如你希望的那样，“晕”字仅仅是给堆栈最外面的值增加100。尽管很简单，但它能够让你明白定义一个新的字是如何运行的。
+“晕”给堆栈最后面的值增加100，尽管这很简单，但它让你明白创建一个新的令规是如何进行的。
 
-## 堆栈管理
+## 栈管理
 
-Now we can start taking a look at some of Forth's predefined words. First,
-let's look at some words for manipulating the elements at the top of the stack.
+现在我们可以说一下Forth语言中预先定义了哪些令字。首先，我们看看那些能够操作栈的令字：
 
-### `dup ( n -- n n )`
+### 重 值|值值
 
-`dup` is short for "duplicate" -- it duplicates the top element of the stack. For example,
-try this out:
+“重”的意思就是重复，它出栈一个值，然后将它复制为两个值，并将其入栈。例如：
 
-    1 2 3 dup
+    1
+    2
+    3
+    重
 
 {% include editor.html size="small" %}
 
-You should end up with the following stack:
+结束后你会看到下面的栈情：
 
 {% include stack.html stack="1 2 3 3" %}
 
-### `drop ( n -- )`
+### 弃 值|
 
-`drop` simply drops the top element of the stack. Running:
+“弃”简单的出栈一个值，试一下下面的例子：
 
-    1 2 3 drop
+    1
+    2
+    3
+    弃
 
-gives you a stack of:
+会得到如下的栈情：
 
 {% include stack.html stack="1 2" %}
 
 {% include editor.html size="small"%}
 
-### `swap ( n1 n2 -- n2 n1 )`
+### 换 值值|值值
 
-`swap`, as you may have guessed, swaps the top two elements of the stack. For example:
+“换”，正如你猜的那样，它出栈两个值，然后把它们交换一下后入栈。例如：
 
-    1 2 3 4 swap
+    1
+    2
+    3
+    4
+    换
 
-will give you:
+得到栈情：
 
 {% include stack.html stack="1 2 4 3" %}
 
 {% include editor.html size="small"%}
 
-### `over ( n1 n2 -- n1 n2 n1 )`
+### 导 值1值2|值1值2值1
 
-`over` is a bit less obvious: it takes the second element from the top of the
-stack and duplicates it to the top of the stack. Running this:
+“导”的意思是，它将栈中的倒数第二个值进行复制，然后将其入栈。运行下面的例子：
 
-    1 2 3 over
+    1
+    2
+    3
+    导
 
-will result in this:
+会产生这样的结果：
 
 {% include stack.html stack="1 2 3 2" %}
 
 {% include editor.html size="small"%}
 
-### `rot ( n1 n2 n3 -- n2 n3 n1 )`
+### 翻 值1 值2 值3 | 值2 值3 值1
 
-Finally, `rot` "rotates" the top _three_ elements of the stack. The third
-element from the top of the stack gets moved to the top of the stack, pushing
-the other two elements down.
+最后的“翻”就是把栈中的倒数第三个值翻到倒数第一的位置。
 
-    1 2 3 rot
+    1
+    2
+    3
+    翻
 
-gives you:
+得到：
 
 {% include stack.html stack="2 3 1" %}
 
 {% include editor.html size="small"%}
 
 
-## Generating Output
+## 输出
 
-Next, let's look at some words for outputting text to the console.
+下面我们来看看哪些令是用来在计算机上输出（显示）的。
 
-### `. ( n -- )` (period)
+### 印 值 --  (period)
 
-The simplest output word in Forth is `.`. You can use `.` to output the top of
-the stack in the output of the current line. For example, try running this
-(make sure to include all the spaces!):
+最简单的显示方法就是“印”，你可以通过它出栈一个值，并将其显示在终端上。试着输入下面的内容：
 
-    1 . 2 . 3 . 4 5 6 . . .
-
-{% include editor.html size="small"%}
-
-You should see this:
-
-<div class="editor-preview editor-text">1 . 2 . 3 . 4 5 6 . . . <span class="output">1 2 3 6 5 4  ok</span></div>
-
-Going through this in order, we push `1`, then pop it off and output it. Then
-we do the same with `2` and `3`. Next we push `4`, `5`, and `6` onto the stack.
-We then pop them off and output them one-by-one. That's why the last three
-numbers in the output are reversed: the stack is last in, first out.
-
-### `emit ( c -- )`
-
-`emit` can be used to output numbers as ascii characters. Just like `.` outputs
-the number at the top of the stack, `emit` outputs that number as an ascii
-character. For example:
-
-     33 119 111 87 emit emit emit emit
+    1
+    印
+    2
+    印
+    3
+    印
+    4
+    5
+    6
+    印
+    印
+    印
 
 {% include editor.html size="small"%}
 
-I won't give the output here so as to not ruin the surprise. This could also be
-written as:
+你会看到这样的栈情：
 
-    87 emit 111 emit 119 emit 33 emit
+<div class="editor-preview editor-text">1 . 2 . 3 . 4 5 6 . . . <span class="output">1 2 3 6 5 4  完成</span></div>
 
-Unlike `.`, `emit` doesn't output any space after each character, enabling you
-to build up arbitrary strings of output.
+我们看一下它的执行过程：想将“1”入栈，然后将其出栈并显示；然后对“2”和“3”重复这样的过程。最后将“4”、“5”和“6”依次入栈，再将它们出栈并显示。最后这三个值的顺序被颠倒的原因是栈是一个后进先出的容器：最后入栈的值总是最先出栈。
 
-### `cr ( -- )`
+### 字 值 |
 
-`cr` is short for carriage return -- it simply outputs a newline:
+“字”能够出栈一个值，将其转换为它所表示的字，并显示出来。例如：
 
-    cr 100 . cr 200 . cr 300 .
+     31243
+     32534
+     字
+     字
 
 {% include editor.html size="small"%}
 
-This will output:
+这里就不告诉你它会产生怎么样的结果了，剧透不利于惊喜。这段内容也可以写成：
 
-<div class="editor-preview editor-text">cr 100 . cr 200 . cr 300 .<span class="output">
+     32534
+     字
+     31243
+     字
+
+不像“印”，“字”不会在显示的内容后面增加任何东西，这让你能够完整的显示一句话。
+
+### 回 |
+
+“回”是回车键的缩写，它显示新的一行：
+
+    回
+    100
+    印
+    回
+    200
+    印
+    300
+    印
+
+{% include editor.html size="small"%}
+
+得到下面的结果：
+
+<div class="editor-preview editor-text">回\100\印\回\200\印\回\300\印  <span class="output">
 100
 200
-300  ok</span></div>
+300  完成</span></div>
 
-### `." ( -- )`
+## 循环控制
 
-Finally we have `."` -- a special word for outputting strings. The `."` word works
-differently inside definitions to interactive mode. `."` marks the beginning of
-a string to output, and the end of the string is marked by `"`. The closing `"`
-isn't a word, and so doesn't need to be space-delimited. Here's an example:
+和其它编程语言一样，现在我们开始学习循环控制的内容。首先我们需要Forth语言中的是非值。
 
-    : say-hello  ." Hello there!" ;
-    say-hello
+### 理值
 
-{% include editor.html size="small"%}
+理值即对错值。在Forth语言中没有专用于表示对错的值，数值“0”被认为是“错”，其它数值则被认为是“对”，尽管Forth语言中常常使用“-1”来表示“对”。
 
-You should see the following output
+比如想比较两个值是否相同，可以使用“同”：
 
-<div class="editor-preview editor-text">say-hello <span class="output">Hello there! ok</span></div>
-
-We can combine `."`, `.`, `cr`, and `emit` to build up more complex output:
-
-    : print-stack-top  cr dup ." The top of the stack is " .
-      cr ." which looks like '" dup emit ." ' in ascii  " ;
-    48 print-stack-top
-
-{% include editor.html size="small"%}
-
-Running this should give you the following output:
-
-<div class="editor-preview editor-text">48 print-stack-top <span class="output">
-The top of the stack is 48
-which looks like '0' in ascii   ok</span></div>
-
-
-## Conditionals and Loops
-
-Now onto the fun stuff! Forth, like most other languages, has conditionals and
-loops for controlling the flow of your program. To understand how they work,
-however, first we need to understand booleans in Forth.
-
-### Booleans
-
-There's actually no boolean type in Forth. The number `0` is treated as false,
-and any other number is true, although the canonical true value is `-1` (all
-boolean operators return `0` or `-1`).
-
-To test if two numbers are equal, you can use `=`:
-
-    3 4 = .
-    5 5 = .
-
-This should output:
-
-<div class="editor-preview editor-text">3 4 = . <span class="output">0  ok</span>
-5 5 = . <span class="output">-1  ok</span></div>
-
-{% include editor.html size="small"%}
-
-You can use `<` and `>` for less than and greater than. `<` checks to see if the
-second item from the top of the stack is less than the top item of the stack, and
-vice versa for `>`:
-
-    3 4 < .
-    3 4 > .
-
-<div class="editor-preview editor-text">3 4 < . <span class="output">-1  ok</span>
-3 4 > . <span class="output">0  ok</span></div>
-
-{% include editor.html size="small"%}
-
-The boolean operators And, Or, and Not are available as `and`, `or`, and `invert`:
-
-    3 4 < 20 30 < and .
-    3 4 < 20 30 > or .
-    3 4 < invert .
-
-The first line is the equivalent of `3 < 4 & 20 < 30` in a C-based language.
-The second line is the equivalent of `3 < 4 | 20 > 30`. The third line is the
-equivalent of `!(3 < 4)`.
-
-`and`, `or`, and `invert` are all bitwise operations. For well-formed flags
-(`0` and `-1`) they'll work as expected, but they'll give incorrect results for
-arbitrary numbers.
-
-{% include editor.html size="small"%}
-
-### `if then`
-
-Now we can finally get onto conditionals. Conditionals in Forth can only be
-used inside definitions. The simplest conditional statement in Forth is `if
-then`, which is equivalent to a standard `if` statement in most languages.
-Here's an example of a definition using `if then`. In this example, we're also
-using the `mod` word, which returns the modulo of the top two numbers on the
-stack. In this case, the top number is 5, and the other is whatever was placed
-on the stack before calling `buzz?`. Therefore, `5 mod 0 =` is a boolean
-expression that checks to see if the top of the stack is divisible by 5.
-
-    : buzz?  5 mod 0 = if ." Buzz" then ;
-    3 buzz?
-    4 buzz?
-    5 buzz?
-
-{% include editor.html size="small"%}
-
-This will output:
-
-<div class="editor-preview editor-text">3 buzz?<span class="output">  ok</span>
-4 buzz?<span class="output">  ok</span>
-5 buzz?<span class="output"> Buzz ok</span></div>
-
-It's important to note that the `then` word marks the end of the `if` statement.
-This makes it equivalent to `fi` in Bash or `end` in Ruby, for example.
-
-Another important thing to realize is that `if` consumes the top value on the
-stack when it checks to see if it's true or false.
-
-### `if else then`
-
-`if else then` is equivalent to an `if/else` statement in most languages. Here's
-an example of its use:
-
-    : is-it-zero?  0 = if ." Yes!" else ." No!" then ;
-    0 is-it-zero?
-    1 is-it-zero?
-    2 is-it-zero?
-
-{% include editor.html size="small"%}
-
-This outputs:
-
-<div class="editor-preview editor-text">0 is-it-zero?<span class="output"> Yes! ok</span>
-1 is-it-zero?<span class="output"> No! ok</span>
-2 is-it-zero?<span class="output"> No! ok</span></div>
-
-This time, the if clause (consequent) is everything between `if` and `else`,
-and the else clause (alternative) is everything between `else` and `then`.
-
-### `do loop`
-
-`do loop` in Forth most closely resembles a `for` loop in most C-based languages.
-In the body of a `do loop`, the special word `i` pushes the current loop index
-onto the stack.
-
-The top two values on the stack give the starting value (inclusive) and ending
-value (exclusive) for the `i` value. The starting value is taken from the top
-of the stack. Here's an example:
-
-    : loop-test  10 0 do i . loop ;
-    loop-test
-
-{% include editor.html size="small"%}
-
-This should output:
-
-<div class="editor-preview editor-text">loop-test<span class="output"> 0 1 2 3 4 5 6 7 8 9  ok</span></div>
-
-The expression `10 0 do i . loop` is roughly equivalent to:
-
-    for (int i = 0; i < 10; i++) {
-      print(i);
-    }
-
-### Fizz Buzz
-
-We can write the classic [Fizz Buzz](https://en.wikipedia.org/wiki/Fizz_buzz)
-program easily using a `do loop`:
-
-    : fizz?  3 mod 0 = dup if ." Fizz" then ;
-    : buzz?  5 mod 0 = dup if ." Buzz" then ;
-    : fizz-buzz?  dup fizz? swap buzz? or invert ;
-    : do-fizz-buzz  25 1 do cr i fizz-buzz? if i . then loop ;
-    do-fizz-buzz
-
-{% include editor.html %}
-
-`fizz?` checks to see if the top of the stack is divisible by 3 using `3 mod 0
-=`. It then uses `dup` to duplicate this result. The top copy of the value is
-consumed by `if`.  The second copy is left on the stack and acts as the return
-value of `fizz?`.
-
-If the number on top of the stack is divisible by 3, the string `"Fizz"` will
-be output, otherwise there will be no output.
-
-`buzz?` does the same thing but with 5, and outputs the string `"Buzz"`.
-
-`fizz-buzz?` calls `dup` to duplicate the value on top of the stack, then calls
-`fizz?`, converting the top copy into a boolean. After this, the top of the
-stack consists of the original value, and the boolean returned by `fizz?`.
-`swap` swaps these, so the original top-of-stack value is back on top, and the
-boolean is underneath. Next we call `buzz?`, which replaces the top-of-stack
-value with a boolean flag. Now the top two values on the stack are booleans
-representing whether the number was divisible by 3 or 5.  After this, we call
-`or` to see if either of these is true, and `invert` to negate this value.
-Logically, the body of `fizz-buzz?` is equivalent to:
-
-    !(x % 3 == 0 || x % 5 == 0)
-
-Therefore, `fizz-buzz?` returns a boolean indicating if the argument is not
-divisible by 3 or 5, and thus should be printed.  Finally, `do-fizz-buzz` loops
-from 1 to 25, calling `fizz-buzz?` on `i`, and outputting `i` if `fizz-buzz?`
-returns true.
-
-If you're having trouble figuring out what's going on inside `fizz-buzz?`, the
-example below might help you to understand how it works. All we're doing here
-is executing each word of the definition of `fizz-buzz?` on a separate line. As
-you execute each line, watch the stack to see how it changes:
-
-    : fizz?  3 mod 0 = dup if ." Fizz" then ;
-    : buzz?  5 mod 0 = dup if ." Buzz" then ;
+    3
     4
-    dup
-    fizz?
-    swap
-    buzz?
-    or
-    invert
+    同
+    印
+    5
+    5
+    同
+    印
+
+将会产生：
+
+<div class="editor-preview editor-text">3  <span class="output">完成</span>
+4  <span class="output">完成</span>
+同  <span class="output">完成</span>
+印 -1  <span class="output">完成</span>
+5  <span class="output">完成</span>
+5  <span class="output">完成</span>
+同  <span class="output">-1  ok</span>
+印 0  <span class="output">完成</span></div>
+
+{% include editor.html size="small"%}
+
+还可以使用“大”和“小”来比较两个值。“大”会比较栈中的（倒数）第二个值是否大于第一个值，“小”则会做相反的比较：
+
+    3\4\小\印
+    3\4\大\印
+
+<div class="editor-preview editor-text">3\4\小\印 <span class="output">-1  完成</span>
+3\4\大\印 <span class="output">0  完成</span></div>
+
+{% include editor.html size="small"%}
+
+理值的运算包括并且、或者和不是，它们分别用“且”、“或”、“非”来实现：
+
+    3\4\小\20\30小\且\印
+    3\4\小\20\30大\或\印
+    3\4\小\非\印
+
+第一行内容等同于“3小于4并且20小于30”，第二行内容等同于“3小于4或者20小于30”，第三行内容等同于“不是3小于4”。
+
+“且”、“或”和“非”都属于位运算，如果一切正常的话，它们会进行正确的判断。然而如果它的值表示不当，就会产生错误的判断结果。
+
+{% include editor.html size="small"%}
+
+### 若则
+
+我们现在进入最终的条理控制内容。在Forth语言中条理控制只在令规中出现，最简单的条理控制是“若则”，它等同于我们常说的“如果…”。在下面这个“若则”的令规例子中，我们使用了“余”来判断出栈的值是否是5的倍数（同5相除，余数为0），来决定是否显示“是”。
+
+    令倍
+      5
+      mod
+      0
+      同
+      若
+      26159
+      字
+      则
+    毕
+    3\倍
+    4\倍
+    5\倍
+
+{% include editor.html size="small"%}
+
+结果如下：
+
+<div class="editor-preview editor-text">3 倍<span class="output">  完成</span>
+4 倍<span class="output">  完成</span>
+5 倍<span class="output"> 是 ok</span></div>
+
+需要注意的是“则”表示“若”条理的结束。之后Forth不再受之前条理的约束而继续执行后面的内容。
+
+另外一个需要注意事项是“若则”会根据出栈的理值是来形成条理约束。
+
+### 若否则
+
+“若否则”等同于“如果/否则”这样的情况，这里有一个例子：
+
+    令零 0\同\若\26159\字\否\21542\字\则\毕
+    0\零
+    1\零
+    2\零
+
+{% include editor.html size="small"%}
+
+结果：
+
+<div class="editor-preview editor-text">0 零<span class="output"> 是 完成</span>
+1 零<span class="output"> 否 完成</span>
+2 零<span class="output"> 否 完成</span></div>
+
+在这种情况下，符合条理的内容为“若”和“否”之间的内容，不符合条理的内容则为“否”和“则”之间的内容。
+
+### 复返
+
+“复返”在Forth中用于运行反复性内容。在循环内容中，“报”可以将当前的反复值入栈。
+
+栈最后的两个值指定了反复的开始值和结束值，先出栈的为开始值，这里有一个例子：
+
+    令工 10\0\复\报\印\返\毕
+    工
+
+{% include editor.html size="small"%}
+
+它会产生下面的结果：
+
+<div class="editor-preview editor-text">工<span class="output"> 0 1 2 3 4 5 6 7 8 9  完成</span></div>
+
+程序“10\0\报\印\返”等同于“反复值依次从0到10运行：显示反复值”。
+
+### 数七游戏
+
+拍七令是一个多人玩的报数游戏，当报到含有7的数，或者能被7整出的数时，报数人必须喊“过”（或者用其它动作替代），否则即认为是犯规。
+
+我们可以用“复返”编写一个拍七令游戏：
+
+    99/1/复
+      报
+      7/余/0/同
+      报
+      10/商/7/同
+      报
+      10/余/7/同
+      或或
+      若
+        36987
+        字
+      否
+        报
+        印
+      则
+    返
 
 {% include editor.html %}
 
-Here's how each line affects the stack:
+“7/余/0/同”判断当前反复值是否能被7整除，“10/商/7/同”判断当前反复值除以10以后是否得到7，“10/余/7/同”则判断当前反复值除以10以后是否余数为7。如果符合这其中任何一个条件，则会显示“过”字；否则则会显示当前的反复值。
 
-    4         4 <- Top
-    dup       4 4 <- Top
-    fizz?     4 0 <- Top
-    swap      0 4 <- Top
-    buzz?     0 0 <- Top
-    or        0 <- Top
-    invert    -1 <- Top
+{% include editor.html %}
 
-Remember, the final value on the stack is the return value of the `fizz-buzz?`
-word. In this case, it's true, because the number was not divisible by 3 or 5,
-and so _should_ be printed.
+## 变数和常数
 
-Here's the same thing but starting with 5:
+Forth语言还可以将值保存在一个变数或者常数中。保存在变数中的值可以进行更改，而保存在常数中的值则不可以进行修改。
 
-    5         5 <- Top
-    dup       5 5 <- Top
-    fizz?     5 0 <- Top
-    swap      0 5 <- Top
-    buzz?     0 -1 <- Top
-    or        -1 <- Top
-    invert    0 <- Top
+### 变数
 
-In this case the original top-of-stack value was divisible by 5, so nothing
-should be printed.
+栈通常用于保存当前正在处理的一些值，Forth中的变数常常被用来在各个处理过程之间需要共同使用的一些值。
 
+用“变”来定义一个新的变数：
 
-## Variables and Constants
+    变通
 
-Forth also allows you to save values in variables and constants. Variables allow
-you to keep track of changing values without having to store them on the stack.
-Constants give you a simple way to refer to a value that won't change.
+这里定义的“通”既不是一个令，也不是一个值，它是一个代表计算机中某个位置的名，通过它可以对该位置中所保存的信息进行修改和读取。当我们输入一个被定义了的名时，它做的仅仅是将它所代表的计算机中的位置入栈，例如：
 
-### Variables
-
-Because the role of local variables is generally played by the stack, variables
-in Forth are used more to store state that may be needed across multiple
-words.
-
-Defining variables is simple:
-
-    variable balance
-
-This basically associates a particular memory location with the name `balance`.
-`balance` is now a word, and all it does is to push its memory location onto the
-stack:
-
-    variable balance
-    balance
+    变通
+    通
 
 {% include editor.html size="small"%}
 
-You should see the value `1000` on the stack. This Forth implementation arbitrarily
-starts storing variables at the memory location `1000`.
+我们看到栈中会出现一个数值，它表示“通”所代表的计算机中的一个位置的值。
 
-The word `!` stores a value at the memory location referenced by a variable, and the
-word `@` fetches the value from a memory location:
+“设”会将一个值保存在这样的一个计算机位置中，“取”则会从这样的计算机地址中获取它所保存的值。
 
-    variable balance
-    123 balance !
-    balance @
+    变通
+    123\通\设
+    通\取
 
 {% include editor.html size="small"%}
 
-This time you should see the value `123` on the stack. `123 balance` pushes the
-value and the memory location onto the stack, and `!` stores that value at that
-memory location. Likewise, `@` retrieves the value based on the memory location,
-and pushes that value onto the stack. If you've used C or C++, you can think of
-`balance` as a pointer that is dereferenced by `@`.
+最后你应该能在栈中看到“123”这个值。“123\通”会将值和保存这个值的内存地址入栈，然后“设”就将它们分别出栈，并将值保存在这个地址中。同样的，“取”则基于所给出的内存地址获取到所保存的值，并将它入栈。
 
-The word `?` is defined as `@ .` and it prints the current value of a variable.
-The word `+!` is used to increase the value of a variable by a certain amount
-(like `+=` in C-based languages).
+“啥”被定义为“取\印”，它会将变数的值显示出来；“增”用来对变数的值进行增加，“减”则用来对变数的值进行减少；“倍”用来对变数的值进行加倍，“衰”则用来对变数的值进行减倍。
 
-    variable balance
-    123 balance !
-    balance ?
-    50 balance +!
-    balance ?
+    变通
+    123\通\设
+    通\啥
+    50\通\增
+    通\啥
 
 {% include editor.html size="small"%}
 
-Run this code and you should see:
+运行这段内容，你会看到这样的结果：
 
-<div class="editor-preview editor-text">variable balance<span class="output">  ok</span>
-123 balance ! <span class="output"> ok</span>
-balance ? <span class="output">123  ok</span>
-50 balance +! <span class="output"> ok</span>
-balance ? <span class="output">173  ok</span>
+<div class="editor-preview editor-text">变\通<span class="output">  完成</span>
+123\通\设 <span class="output"> 完成</span>
+通\啥 <span class="output">123  完成</span>
+50\通\增 <span class="output"> 完成</span>
+通\啥 <span class="output">173  完成</span>
 </div>
 
-### Constants
+### 常数
 
-If you have a value that doesn't change, you can store it as a constant. Constants
-are defined in one line, like this:
+如果你有一个常数，你可以把它保存到一个常数中。“常”用来定义一个常数：
 
-    42 constant answer
+    42
+    常
+    答
 
-This creates a new constant called `answer` with the value `42`. Unlike variables,
-constants just represent values, rather than memory locations, so there's no need
-to use `@`.
+这样就定义了一个新的常数“答”，它代表的值为“42”。和变数不同，常数只是代表这个值，它不是内存中的一个地址，所以不需要使用“取”来获取它所代表的值。
 
-    42 constant answer
-    2 answer *
-
-{% include editor.html size="small"%}
-
-Running this will push the value `84` on the stack. `answer` is treated as if it
-was the number it represents (just like constants and variables in other languages).
-
-
-## Arrays
-
-Forth doesn't exactly support arrays, but it does allow you to allocate a zone of
-contiguous memory, a lot like arrays in C. To allocate this memory, use the `allot`
-word.
-
-    variable numbers
-    3 cells allot
-    10 numbers 0 cells + !
-    20 numbers 1 cells + !
-    30 numbers 2 cells + !
-    40 numbers 3 cells + !
+    42\常\答
+    2\答\积
 
 {% include editor.html size="small"%}
 
-This example creates a memory location called `numbers`, and reserves three extra
-memory cells after this location, giving a total of four memory cells. (`cells`
-just multiplies by the cell-width, which is 1 in this implementation.)
+这段内容会在栈中生成值“84”，“答”被用于表示它所代表的那个值。
 
-`numbers 0 +` gives the address of the first cell in the array. `10 numbers 0 + !`
-stores the value `10` in the first cell of the array.
+## 组数
 
-We can easily write words to simplify array access:
+Forth可以通过对变数进行扩展，使其能够支持组数。
 
-    variable numbers
-    3 cells allot
-    : number  ( offset -- addr )  cells numbers + ;
-
-    10 0 number !
-    20 1 number !
-    30 2 number !
-    40 3 number !
-
-    2 number ?
+    变\组
+    3\扩
+    10\组\0\和\设
+    20\组\1\和\设
+    30\组\2\和\设
+    40\组\3\和\设
 
 {% include editor.html size="small"%}
 
-`number` takes an offset into `numbers` and returns the memory address at that
-offset. `30 2 number !` stores `30` at offset `2` in `numbers`, and `2 number ?`
-prints the value at offset `2` in `numbers`.
+这个例子定义了一个变数“组”，然后又扩展了3个内存单元，这样通过变数“组”就成为了一个组数，我们可以通过这个组数所代表的内存地址和一个顺序号的和，来得到相应的内存地址。“组\0\和”得到组数的第一个的地址，“组\1\和”则得到组数的第二个地址，以此类推，我们可以得到这个组数所有（4个）的地址。
 
+我们可以很简单的定义一个组数的存取令：
 
-## Keyboard Input
+    变\组
+    3\元\扩
+    令量 值 | 值
+      组\和
+    毕
+    10\0\量\设
+    20\1\量\设
+    30\2\量\设
+    40\3\量\设
 
-Forth has a special word called `key`, which is used for accepting keyboard input.
-When the `key` word is executed, execution is paused until a key is pressed. Once
-a key is pressed, the key code of that key is pushed onto the stack. Try out the
-following:
-
-    key . key . key .
-
-{% include editor.html size="small"%}
-
-When you run this line, you'll notice that at first nothing happens. This is because
-the interpreter is waiting for your keyboard input. Try hitting the `A` key, and
-you should see the keycode for that key, `65`, appear as output on the current line.
-Now hit `B`, then `C`, and you should see the following:
-
-<div class="editor-preview editor-text">key . key . key . <span class="output">65 66 67  ok</span></div>
-
-
-### Printing keys with `begin until`
-
-Forth has another kind of loop called `begin until`. This works like a `while`
-loop in C-based languages. Every time the word `until` is hit, the interpreter
-checks to see if the top of the stack is non-zero (true). If it is, it jumps
-back to the matching `begin`. If not, execution continues.
-
-Here's an example of using `begin until` to print key codes:
-
-    : print-keycode  begin key dup . 32 = until ;
-    print-keycode
+    2\量\啥
 
 {% include editor.html size="small"%}
 
-This will keep printing key codes until you press space. You should see something like this:
+“量”通过出栈获取一个偏移位置，然后同“组”所代表的内存地址相加，从而得到这个偏移位置的内存地址。“30\2\量\设”则将30保存在组数的第二个偏移位置中。
 
-<div class="editor-preview editor-text">print-keycode <span class="output">80 82 73 78 84 189 75 69 89 67 79 68 69 32  ok</span></div>
+## 输入
 
- `key` waits for key input, then `dup` duplicates the keycode from `key`. We
-then use `.` to output the top copy of the keycode, and `32 =` to check to see
-if the keycode is equal to 32. If it is, we break out of the loop, otherwise we
-loop back to `begin`.
+Forth有一个特殊的令“键”，它可以收到从键盘输入的任何信息。当输入“键”时，计算机停止了反应，它在等待我们按下键盘上的某一个键以后才会继续运行，这时栈中会有所按下键的码值。试试下面的例子：
 
+    键\印\键\印\键\印
+
+{% include editor.html size="small"%}
+
+当你运行这段代码时，你会注意到开始时没有任何反应，这是因为Forth解释器正在等待来自键盘的输入信息。试着按一下“A”键，然后你就会在当前行看到这个键的码值“65”出现了。然后你可以按“B”，然后按“C”，你可以看到下面的内容：
+
+<div class="editor-preview editor-text">键\印\键\印\键\印<span class="output">65 66 67  完成</span></div>
+
+
+### 利用无限复返令实现键盘码值打印
+
+Forth还提供有另一种反复令“直返”，它也被称为“无限反复”。每次执行到“返”时，Forth会出栈一个值，然后检查它是否为“对”。如果是，则程序会返回到“直”的位置再次运行，否则程序会结束反复运行状态，继续运行后面的代码。
+
+下面是一个利用“直返”打印键盘码值的代码：
+
+    令工
+      直
+        键
+        重\印
+        32\同\非
+      返
+    毕
+    工
+
+{% include editor.html size="small"%}
+
+这段代码会一直显示输入键的码值，直到你按下空格键（它的码值为32）。你应该看到类似这样的结果：
+
+<div class="editor-preview editor-text">工 <span class="output">80 82 73 78 84 189 75 69 89 67 79 68 69 32  完成</span></div>
+
+“键”等待来自键盘的输入，然后“重”会生成所得到键码值的拷贝，我们用“印”将其显示到终端。“32\同\非”则检查收到键的码值是否等于32，如果是，则会退出反复；否则会回到“直”的地方继续反复运行。
 
 ## Snake!
 
@@ -1004,14 +910,6 @@ variables.
 
 ## The End
 
-Forth is actually much more powerful than what I've taught here (and what I
-implemented in my interpreter). A true Forth system allows you to modify how
-the compiler works and create new defining words, allowing you to completely
-customize your environment and create your own languages within Forth.
+真正的Forth要比我在这里说的（以及我编写的这个解释器）强大得多。一个真正的Forth系统能让你修改编译器如何工作，建立新的令字，以及让你完全定义你的环境，甚至基于Forth创建你自己的语言。
 
-A great resource for learning the full power of Forth is the short book
-["Starting Forth"](http://www.forth.com/starting-forth/) by Leo Brodie. It's
-available for free online and teaches you all the fun stuff I left out. It also
-has a good set of exercises for you to test out your knowledge. You'll need to
-download a copy of [SwiftForth](http://www.forth.com/swiftforth/dl.html) to run
-the code though.
+一个更好的学习Forth的书是Leo Brodie编写的[Forth起步](http://www.forth.com/starting-forth/)，它在线免费，告诉你很多这里没有的有趣的东西。它还有一些很好的练习题，让你测试一下你的水平。你可能需要下载安装[SwiftForth](http://www.forth.com/swiftforth/dl.html)来运行书中的代码。 
