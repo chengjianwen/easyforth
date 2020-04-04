@@ -1,7 +1,5 @@
 .editor-text {
   font: 14px monospace;
-  background-color: blue;
-  color: white;
 }
 
 .editor {
@@ -68,6 +66,11 @@
   white-space: pre-wrap;
   margin: 0;
   line-height: 1.5em;
+}
+
+.input {
+  background-color: blue;
+  color: white;
 }
 
 .editor .input {
