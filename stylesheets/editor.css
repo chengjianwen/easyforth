@@ -1,6 +1,7 @@
 .editor-text {
   font: 14px monospace;
-  background-color: #0000FF;
+  background-color: blue;
+  color: white;
 }
 
 .editor {
@@ -12,7 +13,8 @@
 }
 
 .stack-viewer {
-  background-color: #FF0000;
+  color: white;
+  background-color: red;
 }
 
 .editor.has-canvas .text,
@@ -57,7 +59,8 @@
 }
 
 .prev-lines {
-  background-color: #00FF00;
+  background-color: green;
+  color: white;
 }
 
 /* newlines in output will be treated like new paragraphs */
