@@ -67,7 +67,7 @@ Forth与其它编程语言的区别在于它对栈的使用。在Forth中，一�
 
 {% include editor.html %}
 
-每次你通过“回车”键输入一行，Forth解释器就会执行这一行中的内容，然后会有一句“完成”告诉你没有发生错误。在执行每一行内容时，你还应该注意到最上面的一行内容在不断得发生变化，它就是Forth中栈的当前状态，它看起来应该是这样的：
+每次你通过“回车”键输入一行，Forth解释器就会执行这一行中的内容，然后会有一句“完成！”告诉你你输入的内容被正确的执行。在Forth执行每一行内容时，你应该注意到最上面的一行内容在不断得发生变化，它就是Forth中栈的当前状态，它看起来应该是这样的：
 
 {% include stack.html stack="1 2 3" %}
 
@@ -77,19 +77,19 @@ Forth与其它编程语言的区别在于它对栈的使用。在Forth中，一�
 
 这个时候，你的编辑器窗口应该是这个样子：
 
-<div class="editor-preview editor-text">1  <span class="output">完成</span>
-2  <span class="output">完成</span>
-3  <span class="output">完成</span>
-+  <span class="output">完成</span>
+<div class="editor-preview editor-text">1  <span class="output">完成！</span>
+2  <span class="output">完成！</span>
+3  <span class="output">完成！</span>
++  <span class="output">完成！</span>
 </div>
 
 再次输入“和”，并按“回车”键，最后面的两个值会又被替换为6。如果你输入更多的“和”，尽管堆栈中只剩一个值，Forth仍然会试图从堆栈中出栈两个值，这样就会产生“栈已空”的错误：
 
-<div class="editor-preview editor-text">1  <span class="output">完成</span>
-2  <span class="output">完成</span>
-3  <span class="output">完成</span>
-+  <span class="output">完成</span>
-+  <span class="output">完成</span>
+<div class="editor-preview editor-text">1  <span class="output">完成！</span>
+2  <span class="output">完成！</span>
+3  <span class="output">完成！</span>
++  <span class="output">完成！</span>
++  <span class="output">完成！</span>
 +  <span class="output">栈已空</span>
 </div>
 
@@ -255,7 +255,7 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 
 你会看到这样的栈情：
 
-<div class="editor-preview editor-text">1 . 2 . 3 . 4 5 6 . . . <span class="output">1 2 3 6 5 4  完成</span></div>
+<div class="editor-preview editor-text">1 . 2 . 3 . 4 5 6 . . . <span class="output">1 2 3 6 5 4  完成！</span></div>
 
 我们看一下它的执行过程：想将“1”入栈，然后将其出栈并显示；然后对“2”和“3”重复这样的过程。最后将“4”、“5”和“6”依次入栈，再将它们出栈并显示。最后这三个值的顺序被颠倒的原因是栈是一个后进先出的容器：最后入栈的值总是最先出栈。
 
@@ -299,7 +299,7 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 <div class="editor-preview editor-text">回\100\印\回\200\印\回\300\印  <span class="output">
 100
 200
-300  完成</span></div>
+300  完成！</span></div>
 
 ## 循环控制
 
@@ -322,14 +322,14 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 
 将会产生：
 
-<div class="editor-preview editor-text">3  <span class="output">完成</span>
-4  <span class="output">完成</span>
-同  <span class="output">完成</span>
-印 -1  <span class="output">完成</span>
-5  <span class="output">完成</span>
-5  <span class="output">完成</span>
+<div class="editor-preview editor-text">3  <span class="output">完成！</span>
+4  <span class="output">完成！</span>
+同  <span class="output">完成！</span>
+印 -1  <span class="output">完成！</span>
+5  <span class="output">完成！</span>
+5  <span class="output">完成！</span>
 同  <span class="output">-1  ok</span>
-印 0  <span class="output">完成</span></div>
+印 0  <span class="output">完成！</span></div>
 
 {% include editor.html size="small"%}
 
@@ -338,8 +338,8 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
     3\4\小\印
     3\4\大\印
 
-<div class="editor-preview editor-text">3\4\小\印 <span class="output">-1  完成</span>
-3\4\大\印 <span class="output">0  完成</span></div>
+<div class="editor-preview editor-text">3\4\小\印 <span class="output">-1  完成！</span>
+3\4\大\印 <span class="output">0  完成！</span></div>
 
 {% include editor.html size="small"%}
 
@@ -377,8 +377,8 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 
 结果如下：
 
-<div class="editor-preview editor-text">3 倍<span class="output">  完成</span>
-4 倍<span class="output">  完成</span>
+<div class="editor-preview editor-text">3 倍<span class="output">  完成！</span>
+4 倍<span class="output">  完成！</span>
 5 倍<span class="output"> 是 ok</span></div>
 
 需要注意的是“则”表示“若”条理的结束。之后Forth不再受之前条理的约束而继续执行后面的内容。
@@ -398,9 +398,9 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 
 结果：
 
-<div class="editor-preview editor-text">0 零<span class="output"> 是 完成</span>
-1 零<span class="output"> 否 完成</span>
-2 零<span class="output"> 否 完成</span></div>
+<div class="editor-preview editor-text">0 零<span class="output"> 是 完成！</span>
+1 零<span class="output"> 否 完成！</span>
+2 零<span class="output"> 否 完成！</span></div>
 
 在这种情况下，符合条理的内容为“若”和“否”之间的内容，不符合条理的内容则为“否”和“则”之间的内容。
 
@@ -417,7 +417,7 @@ Forth的规则非常简单，它的内容被解释为按行分隔的值或者令
 
 它会产生下面的结果：
 
-<div class="editor-preview editor-text">工<span class="output"> 0 1 2 3 4 5 6 7 8 9  完成</span></div>
+<div class="editor-preview editor-text">工<span class="output"> 0 1 2 3 4 5 6 7 8 9  完成！</span></div>
 
 程序“10\0\报\印\返”等同于“反复值依次从0到10运行：显示反复值”。
 
@@ -493,11 +493,11 @@ Forth语言还可以将值保存在一个变数或者常数中。保存在变数
 
 运行这段内容，你会看到这样的结果：
 
-<div class="editor-preview editor-text">变\通<span class="output">  完成</span>
-123\通\设 <span class="output"> 完成</span>
-通\啥 <span class="output">123  完成</span>
-50\通\增 <span class="output"> 完成</span>
-通\啥 <span class="output">173  完成</span>
+<div class="editor-preview editor-text">变\通<span class="output">  完成！</span>
+123\通\设 <span class="output"> 完成！</span>
+通\啥 <span class="output">123  完成！</span>
+50\通\增 <span class="output"> 完成！</span>
+通\啥 <span class="output">173  完成！</span>
 </div>
 
 ### 常数
@@ -560,7 +560,7 @@ Forth有一个特殊的令“键”，它可以收到从键盘输入的任何信
 
 当你运行这段代码时，你会注意到开始时没有任何反应，这是因为Forth解释器正在等待来自键盘的输入信息。试着按一下“A”键，然后你就会在当前行看到这个键的码值“65”出现了。然后你可以按“B”，然后按“C”，你可以看到下面的内容：
 
-<div class="editor-preview editor-text">键\印\键\印\键\印<span class="output">65 66 67  完成</span></div>
+<div class="editor-preview editor-text">键\印\键\印\键\印<span class="output">65 66 67  完成！</span></div>
 
 
 ### 利用无限复返令实现键盘码值打印
@@ -582,7 +582,7 @@ Forth还提供有另一种反复令“直返”，它也被称为“无限反复
 
 这段代码会一直显示输入键的码值，直到你按下空格键（它的码值为32）。你应该看到类似这样的结果：
 
-<div class="editor-preview editor-text">工 <span class="output">80 82 73 78 84 189 75 69 89 67 79 68 69 32  完成</span></div>
+<div class="editor-preview editor-text">工 <span class="output">80 82 73 78 84 189 75 69 89 67 79 68 69 32  完成！</span></div>
 
 “键”等待来自键盘的输入，然后“重”会生成所得到键码值的拷贝，我们用“印”将其显示到终端。“32\同\非”则检查收到键的码值是否等于32，如果是，则会退出反复；否则会回到“直”的地方继续反复运行。
 
