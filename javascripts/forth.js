@@ -22,7 +22,7 @@ function Forth(next) {
   var currentDefinition = null;
 
   function MissingWordError(word) {
-    this.message = word + "没有定义";
+    this.message = word + "未定义！";
   }
 
   function namedFunction(name, func) {

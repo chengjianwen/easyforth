@@ -10,7 +10,7 @@
   position: relative;
 }
 
-.stack-viewer {
+.stack-viewer .stack {
   color: white;
   background-color: red;
 }
@@ -56,7 +56,7 @@
   line-height: 1.5em;
 }
 
-.prev-lines {
+.prev-lines .editor-preview {
   background-color: green;
   color: white;
 }
