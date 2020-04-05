@@ -7,7 +7,6 @@ layout: default
   {:toc}
 </div>
 
-
 ## 写在前面的话
 
 一年多以前，教育状况是如此让人揪心，我想我也许可以在这方面做些事情。考虑到教育的核心是课程，所以我开始编写一本《编程入门》的书，然后给一些愿意学习电脑编程的孩子们通过网络进行授课。
@@ -248,6 +247,19 @@ Forth提供有一些预先定义的令字，然而用户也可以定义自己的
 
 {% include stack.html stack="4 12" %}
 
+### 负(值|值)
+
+“负”的意思就是数字前面加一个“-”符号，如果它是正数，它将变为负数；反之如果它是一个负数，它将变为一个正数。例如：
+
+    400
+    负
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="-400" %}
+
 ### 增(值|值)
 
 “增”的意思就是将数字加一，它从栈中取一个值，将它加上一，然后将结果入栈。例如：
@@ -340,9 +352,126 @@ Forth提供有一些预先定义的令字，然而用户也可以定义自己的
 
 {% include stack.html stack="273" %}
 
-## 栈管理
+## 道理运算
 
-有些令字不对值做任何处理，它们只是调整它们在栈中的摆放情况。
+有时候我们需要让计算机来判断某个说法是否正确，比如一个值是不是大于100，或者一个值是否是正数，等等，这种运算称为道理运算。
+
+道理运算除了可以对数值进行比较、判断等，还可以对道理运算的结果进行运算，比如一个值大于100并且小于200。
+
+显然理运算的结果只有两个：对和错。在Forth中，“错”用“0”来表示，而“对”则用一个非“0”的值（一般用-1）来表示。
+
+### 同(值值|值)
+
+“同”用于比较两个值是否相同，例如：
+
+    3
+    4
+    同
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="0" %}
+
+### 对(值|值)
+
+“对”用于查看值是否为“对”，即是否为“0”，例如：
+
+    -1
+    对
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="-1" %}
+
+### 错(值|值)
+
+“错”用于查看值是否为“错”，即是否非“0”，例如：
+
+    0
+    错
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="-1" %}
+
+### 大、小(值值|值)
+
+“大”和“小”用于判断两个值的大小，例如
+
+    3
+    4
+    大
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="0" %}
+
+### 且(值值|值)
+
+“且”用来比较两个值是否全为“对”，否则它产生“错”值。例如：
+
+    -1
+    0
+    且
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="0" %}
+
+### 或(值值|值)
+
+“或”用来比较两个值是否是否至少有一个为“对”，否则它产生“错”值。例如：
+
+    -1
+    0
+    或
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="-1" %}
+
+### 非(值|值)
+
+“非”用来将“对”改为“错”，而将“错”改为“对”，例如：
+
+    -1
+    非
+
+{% include editor.html size="small" %}
+
+结果你会看到下面的栈情：
+
+{% include stack.html stack="0" %}
+
+最后我们来看一个稍微复杂的例子：
+
+    3 4小
+    20 30小
+    且
+
+第一行内容等同于“3小于4”，第二行内容等同于“20小于30”，第三行内容等同于“并且”，所以整个程序的意思就是“3小于4并且20小于30”。
+
+{% include editor.html size="small"%}
+
+最后你会看到下面的栈情：
+
+{% include stack.html stack="-1" %}
+
+## 栈操作
+
+有些令字不对值做任何运算，然而它们仍然会对栈中的值作出改变。
 
 ### 重 (值|值值)
 
@@ -496,55 +625,6 @@ Forth提供有一些预先定义的令字，然而用户也可以定义自己的
 
 和其它编程语言一样，现在我们开始学习循环控制的内容。首先我们需要Forth语言中的是非值。
 
-### 理值
-
-理值即对错值。在Forth语言中没有专用于表示对错的值，数值“0”被认为是“错”，其它数值则被认为是“对”，尽管Forth语言中常常使用“-1”来表示“对”。
-
-比如想比较两个值是否相同，可以使用“同”：
-
-    3
-    4
-    同
-    印
-    5
-    5
-    同
-    印
-
-将会产生：
-
-<div class="editor-preview editor-text">3  <span class="output">完成！</span>
-4  <span class="output">完成！</span>
-同  <span class="output">完成！</span>
-印 -1  <span class="output">完成！</span>
-5  <span class="output">完成！</span>
-5  <span class="output">完成！</span>
-同  <span class="output">-1  ok</span>
-印 0  <span class="output">完成！</span></div>
-
-{% include editor.html size="small"%}
-
-还可以使用“大”和“小”来比较两个值。“大”会比较栈中的（倒数）第二个值是否大于第一个值，“小”则会做相反的比较：
-
-    3\4\小\印
-    3\4\大\印
-
-<div class="editor-preview editor-text">3\4\小\印 <span class="output">-1  完成！</span>
-3\4\大\印 <span class="output">0  完成！</span></div>
-
-{% include editor.html size="small"%}
-
-理值的运算包括并且、或者和不是，它们分别用“且”、“或”、“非”来实现：
-
-    3\4\小\20\30小\且\印
-    3\4\小\20\30大\或\印
-    3\4\小\非\印
-
-第一行内容等同于“3小于4并且20小于30”，第二行内容等同于“3小于4或者20小于30”，第三行内容等同于“不是3小于4”。
-
-“且”、“或”和“非”都属于位运算，如果一切正常的话，它们会进行正确的判断。然而如果它的值表示不当，就会产生错误的判断结果。
-
-{% include editor.html size="small"%}
 
 ### 若则
 
@@ -740,391 +820,6 @@ Forth可以通过对变数进行扩展，使其能够支持组数。
 {% include editor.html size="small"%}
 
 “量”通过出栈获取一个偏移位置，然后同“组”所代表的内存地址相加，从而得到这个偏移位置的内存地址。“30\2\量\写”则将30写入在组数的第二个偏移位置中。
-
-## 输入
-
-Forth有一个特殊的令“键”，它可以收到从键盘输入的任何信息。当输入“键”时，计算机停止了反应，它在等待我们按下键盘上的某一个键以后才会继续运行，这时栈中会有所按下键的码值。试试下面的例子：
-
-    键\印\键\印\键\印
-
-{% include editor.html size="small"%}
-
-当你运行这段代码时，你会注意到开始时没有任何反应，这是因为Forth解释器正在等待来自键盘的输入信息。试着按一下“A”键，然后你就会在当前行看到这个键的码值“65”出现了。然后你可以按“B”，然后按“C”，你可以看到下面的内容：
-
-<div class="editor-preview editor-text">键\印\键\印\键\印<span class="output">65 66 67  完成！</span></div>
-
-
-### 利用无限复返令实现键盘码值打印
-
-Forth还提供有另一种反复令“直返”，它也被称为“无限反复”。每次执行到“返”时，Forth会出栈一个值，然后检查它是否为“对”。如果是，则程序会返回到“直”的位置再次运行，否则程序会结束反复运行状态，继续运行后面的代码。
-
-下面是一个利用“直返”打印键盘码值的代码：
-
-    令工
-      直
-        键
-        重\印
-        32\同\非
-      返
-    毕
-    工
-
-{% include editor.html size="small"%}
-
-这段代码会一直显示输入键的码值，直到你按下空格键（它的码值为32）。你应该看到类似这样的结果：
-
-<div class="editor-preview editor-text">工 <span class="output">80 82 73 78 84 189 75 69 89 67 79 68 69 32  完成！</span></div>
-
-“键”等待来自键盘的输入，然后“重”会生成所得到键码值的拷贝，我们用“印”将其显示到终端。“32\同\非”则检查收到键的码值是否等于32，如果是，则会退出反复；否则会回到“直”的地方继续反复运行。
-
-## Snake!
-
-Now it's time to put it all together and make a game! Rather than having you type
-all the code, I've pre-loaded it into the editor.
-
-Before we look at the code, try playing the game. To start the game, execute the
-word `start`. Then use the arrow keys to move the snake. If you lose, you can run
-`start` again.
-
-{% include editor.html canvas=true game=true %}
-
-Before we delve too deeply into this code, two disclaimers. First, this is terrible
-Forth code. I'm by no means a Forth expert, so there's probably all kinds of things
-I'm doing in completely the wrong way. Second, this game uses a few non-standard
-techniques in order to interface with JavaScript. I'll go through these now.
-
-### Non-Standard Additions
-
-#### The Canvas
-
-You may have noticed that this editor is different from the others: it has an HTML5
-Canvas element built in. I've created a very simple memory-mapped interface for
-drawing onto this canvas. The canvas is split up into 24 x 24 "pixels" which can
-be black or white. The first pixel is found at the memory address given by the
-variable `graphics`, and the rest of the pixels are offsets from the variable. So,
-for example, to draw a white pixel in the top-left corner you could run
-
-    1 graphics !
-
-{% include editor.html size="small" canvas=true %}
-
-The game uses the following words to draw to the canvas:
-
-    : convert-x-y ( x y -- offset )  24 cells * + ;
-    : draw ( color x y -- )  convert-x-y graphics + ! ;
-    : draw-white ( x y -- )  1 rot rot draw ;
-    : draw-black ( x y -- )  0 rot rot draw ;
-
-For example, `3 4 draw-white` draws a white pixel at the coordinates (3, 4). The
-y coordinate is multiplied by 24 to get the row, then the x coordinated is added
-to get the column.
-
-#### Non-Blocking Keyboard Input
-
-The Forth word `key` blocks, so is unsuitable for a game like this. I've added
-a variable called `last-key` which always holds the value of the last key to be
-pressed. `last-key` is only updated while the interpreter is running Forth code.
-
-#### Random Number Generation
-
-The Forth standard doesn't define a way of generating random numbers, so I've
-added a word called `random ( range -- n )` that takes a range and returns a
-random number from 0 to range - 1. For example, `3 random` could
-return `0`, `1`, or `2`.
-
-#### `sleep ( ms -- )`
-
-Finally, I've added a blocking `sleep` word that pauses execution for the
-number of milliseconds given.
-
-### The Game Code
-
-Now we can work through the code from start to finish.
-
-#### Variables and Constants
-
-The start of the code just sets up some variables and constants:
-
-    variable snake-x-head
-    500 cells allot
-
-    variable snake-y-head
-    500 cells allot
-
-    variable apple-x
-    variable apple-y
-
-    0 constant left
-    1 constant up
-    2 constant right
-    3 constant down
-
-    24 constant width
-    24 constant height
-
-    variable direction
-    variable length
-
-`snake-x-head` and `snake-y-head` are memory locations used to store the x and
-y coordinates of the head of the snake. 500 cells of memory are alloted after
-these two locations to store the coordinates of the tail of the snake.
-
-Next we define two words for accessing memory locations representing the body
-of the snake.
-
-    : snake-x ( offset -- address )
-      cells snake-x-head + ;
-
-    : snake-y ( offset -- address )
-      cells snake-y-head + ;
-
-Just like the `number` word earlier, these two words are used to access
-elements in the arrays of snake segments. After this come some words for
-drawing to the canvas, described above.
-
-We use constants to refer to the four directions (`left`, `up`, `right`, and
-`down`), and a variable `direction` to store the current direction.
-
-#### Initialization
-
-After this we initialize everything:
-
-    : draw-walls
-      width 0 do
-        i 0 draw-black
-        i height 1 - draw-black
-      loop
-      height 0 do
-        0 i draw-black
-        width 1 - i draw-black
-      loop ;
-
-    : initialize-snake
-      4 length !
-      length @ 1 + 0 do
-        12 i - i snake-x !
-        12 i snake-y !
-      loop
-      right direction ! ;
-
-    : set-apple-position apple-x ! apple-y ! ;
-
-    : initialize-apple  4 4 set-apple-position ;
-
-    : initialize
-      width 0 do
-        height 0 do
-          j i draw-white
-        loop
-      loop
-      draw-walls
-      initialize-snake
-      initialize-apple ;
-
-`draw-walls` uses two `do/loop`s to draw the horizontal and vertical walls,
-respectively.
-
-`initialize-snake` sets the `length` variable to `4`, then loops from `0` to
-`length + 1` filling in the starting snake positions. The snake positions are
-always kept one longer than the length so we can grow the snake easily.
-
-`set-apple-position` and `initialize-apple` set the initial position of the
-apple to (4,4).
-
-Finally, `initialize` fills everything in white and calls the three
-initialization words.
-
-#### Moving the Snake
-
-Here's the code for moving the snake based on the current value of `direction`:
-
-    : move-up  -1 snake-y-head +! ;
-    : move-left  -1 snake-x-head +! ;
-    : move-down  1 snake-y-head +! ;
-    : move-right  1 snake-x-head +! ;
-
-    : move-snake-head  direction @
-      left over  = if move-left else
-      up over    = if move-up else
-      right over = if move-right else
-      down over  = if move-down
-      then then then then drop ;
-
-    \ Move each segment of the snake forward by one
-    : move-snake-tail  0 length @ do
-        i snake-x @ i 1 + snake-x !
-        i snake-y @ i 1 + snake-y !
-      -1 +loop ;
-
-`move-up`, `move-left`, `move-down`, and `move-right` just add or subtract one
-from the x or y coordinate of the snake head. `move-snake-head` inspects the
-value of `direction` and calls the appropriate `move-*` word. This `over = if`
-pattern is an idiomatic way of doing case statements in Forth.
-
-`move-snake-tail` goes through the array of snake positions backwards, copying
-each value forward by 1 cell. This is called before we move the snake head, to
-move each segment of the snake forward one space. It uses a `do/+loop`, a
-variation of a `do/loop` that pops the stack on every iteration and adds that
-value to the next index, instead of incrementing by 1 each time. So `0 length @
-do -1 +loop` loops from `length` to `0` in increments of `-1`.
-
-#### Keyboard Input
-
-The next section of code takes the keyboard input and changes the snake direction
-if appropriate.
-
-    : is-horizontal  direction @ dup
-      left = swap
-      right = or ;
-
-    : is-vertical  direction @ dup
-      up = swap
-      down = or ;
-
-    : turn-up     is-horizontal if up direction ! then ;
-    : turn-left   is-vertical if left direction ! then ;
-    : turn-down   is-horizontal if down direction ! then ;
-    : turn-right  is-vertical if right direction ! then ;
-
-    : change-direction ( key -- )
-      37 over = if turn-left else
-      38 over = if turn-up else
-      39 over = if turn-right else
-      40 over = if turn-down
-      then then then then drop ;
-
-    : check-input
-      last-key @ change-direction
-      0 last-key ! ;
-
-`is-horizontal` and `is-vertical` check the current status of the `direction`
-variable to see if it's a horizontal or vertical direction.
-
-The `turn-*` words are used to set a new direction, but use `is-horizontal` and
-`is-vertical` to check the current direction first to see if the new direction
-is valid. For example, if the snake is moving horizontally, setting a new
-direction of `left` or `right` doesn't make sense.
-
-`change-direction` takes a key and calls the appropriate `turn-*` word if the
-key was one of the arrow keys. `check-input` does the work of getting the last
-key from the `last-key` pseudo-variable, calling `change-direction`, then setting
-`last-key` to 0 to indicate that the most recent keypress has been dealt with.
-
-#### The Apple
-
-The next code is used for checking to see if the apple has been eaten, and if so,
-moving it to a new (random) location. Also, if the apple has been eaten we grow
-the snake.
-
-    \ get random x or y position within playable area
-    : random-position ( -- pos )
-      width 4 - random 2 + ;
-
-    : move-apple
-      apple-x @ apple-y @ draw-white
-      random-position random-position
-      set-apple-position ;
-
-    : grow-snake  1 length +! ;
-
-    : check-apple ( -- flag )
-      snake-x-head @ apple-x @ =
-      snake-y-head @ apple-y @ =
-      and if
-        move-apple
-        grow-snake
-      then ;
-
-`random-position` generates a random x or y coordinate in the range of `2` to
-`width - 2`. This prevents the apple from ever appearing right next to the wall.
-
-`move-apple` erases the current apple (using `draw-white`) then creates a new
-pair of x/y coordinates for the apple using `random-position` twice. Finally,
-it calls `set-apple-position` to move the apple to the new coordinates.
-
-`grow-snake` simply adds one to the `length` variable.
-
-`check-apple` compares the x/y coordinates of the apple and the snake head to
-see if they're the same (using `=` twice and `and` to combine the two
-booleans). If the coordinates are the same, we call `move-apple` to move the
-apple to a new position and `grow-snake` to make the snake 1 segment longer.
-
-#### Collision Detection
-
-Next we see if the snake has collided with the walls or itself.
-
-    : check-collision ( -- flag )
-      \ get current x/y position
-      snake-x-head @ snake-y-head @
-
-      \ get color at current position
-      convert-x-y graphics + @
-
-      \ leave boolean flag on stack
-      0 = ;
-
-`check-collision` checks to see if the new snake head position is already black
-(this word is called _after_ updating the snake's position but _before_ drawing
-it at the new position). We leave a boolean on the stack to say whether a
-collision has occured or not.
-
-#### Drawing the Snake and Apple
-
-The next two words are responsible for drawing the snake and apple.
-
-    : draw-snake
-      length @ 0 do
-        i snake-x @ i snake-y @ draw-black
-      loop
-      length @ snake-x @
-      length @ snake-y @
-      draw-white ;
-
-    : draw-apple
-      apple-x @ apple-y @ draw-black ;
-
-`draw-snake` loops through each cell in the snake arrays, drawing a black pixel
-for each one. After that it draws a white pixel at an offset of `length`. The
-last part of the tail is at `length - 1` into the array so `length` holds the
-previous last tail segment.
-
-`draw-apple` simply draws a black pixel at the apple's current location.
-
-#### The Game Loop
-
-The game loop constantly loops until a collision occurs, calling each of the
-words defined above in turn.
-
-    : game-loop ( -- )
-      begin
-        draw-snake
-        draw-apple
-        100 sleep
-        check-input
-        move-snake-tail
-        move-snake-head
-        check-apple
-        check-collision
-      until
-      ." Game Over" ;
-
-    : start  initialize game-loop ;
-
-The `begin/until` loop uses the boolean returned by `check-collision` to see
-whether to continue looping or to exit the loop. When the loop is exited the
-string `"Game Over"` is printed. We use `100 sleep` to pause for 100 ms every
-iteration, making the game run at rougly 10 fps.
-
-`start` just calls `initialize` to reset everything, then kicks off `game-loop`.
-Because all the initialization happens in the `initialize` word, you can call
-`start` again after game over.
-
-------
-
-And that's it! Hopefully all the code in the game made sense. If not, you can
-try running individual words to see their effect on the stack and/or on the
-variables.
-
 
 ## 结束语
 

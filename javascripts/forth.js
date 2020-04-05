@@ -10,10 +10,8 @@ function Forth(next) {
     returnStack: Stack('Return Stack'),
     dictionary: Dictionary(),
     memory: Memory(),
-    // This is set when the interpreter is waiting for a key to be pressed or sleeping
-    pause: false,
     // This is set within readLine as a callback to continue processing tokens
-    // once a key has been pressed or sleep has finished
+    // once sleep has finished
     onContinue: null
   };
 
@@ -193,10 +191,6 @@ function Forth(next) {
     next({
       readLine: readLine,
       readLines: readLines,
-      keydown: function (keyCode) {
-        context.memory.setValue(context.memory.getVariable("码"), keyCode);
-        context.keydown && context.keydown(keyCode);
-      },
       getStack: function () {
         return context.stack.print();
       },

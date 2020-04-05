@@ -8,7 +8,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
 
   [
     "令", "毕", "若", "否", "则", "复", "返",
-    "直", "返", "变", "常", "键"
+    "直", "返", "变", "常"
   ].forEach(function (code) {
     addToDictionary(code, controlCode(code));
   });
@@ -50,8 +50,52 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(Math.floor(b % a));
   });
 
+  addToDictionary("增", function (context) {
+    context.stack.push(context.stack.pop() + 1);
+  });
+
+  addToDictionary("减", function (context) {
+    context.stack.push(context.stack.pop() - 1);
+  });
+
+  addToDictionary("倍", function (context) {
+    context.stack.push(context.stack.pop() * 2);
+  });
+
+  addToDictionary("衰", function (context) {
+    context.stack.push(context.stack.pop() / 2);
+  });
+
+  addToDictionary("负", function (context) {
+    context.stack.push(-context.stack.pop());
+  });
+
+  addToDictionary("方", function (context) {
+    var a = context.stack.pop();
+    context.stack.push(a * a);
+  });
+
+  addToDictionary("根", function (context) {
+    var a = context.stack.pop();
+    context.stack.push(Math.floor(Math.sqrt(a)));
+  });
+
+  addToDictionary("幂", function (context) {
+    var a = context.stack.pop();
+    var b = context.stack.pop();
+    context.stack.push(Math.pow(b, a));
+  });
+
   addToDictionary("同", function (context) {
     context.stack.push(context.stack.pop() === context.stack.pop() ? TRUE : FALSE);
+  });
+
+  addToDictionary("对", function (context) {
+    context.stack.push(context.stack.pop() === 0 ? TRUE : FALSE);
+  });
+
+  addToDictionary("错", function (context) {
+    context.stack.push(context.stack.pop() != 0 ? TRUE : FALSE);
   });
 
   addToDictionary("小", function (context) {
@@ -137,29 +181,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.memory.allot(context.stack.pop());
   });
 
-  addToDictionary("键", function (context) {
-    context.pause = true;
-
-    // set callback for when key is pressed
-    context.keydown = function (keyCode) {
-      context.pause = false;
-      context.keydown = null;
-      context.stack.push(keyCode);
-      context.onContinue();
-    };
-  });
-
-  addToDictionary("休", function (context) {
-    var timeout = context.stack.pop();
-    context.pause = true;
-
-    setTimeout(function () {
-      context.pause = false;
-      context.onContinue();
-    }, timeout);
-  });
-
-  addToDictionary("机", function (context) {
+  addToDictionary("随", function (context) {
     var range = context.stack.pop();
     context.stack.push(Math.floor(Math.random() * range));
   });
@@ -167,16 +189,9 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   readLines([
     "令\回\10\字\毕",
     "令\空\32\字\毕",
-    "令\零\0\同\毕",
-    "令\增\1\和\毕",
-    "令\减\1\差\毕",
-    "令\倍\2\积\毕",
-    "令\衰\2\商\毕",
-    "令\负\-1\积\毕",
     "令\啥\读\印\毕",
 
     "变\像", // start of graphics memory
     "575\扩", // graphics memory takes 24 * 24 = 576 cells altogether
-    "变\码", // 保存按键码的变数
   ], next);
 }
