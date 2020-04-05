@@ -11,6 +11,7 @@ function Forth(next) {
     dictionary: Dictionary(),
     memory: Memory(),
     // This is set within readLine as a callback to continue processing tokens
+    pause: false,
     // once sleep has finished
     onContinue: null
   };
@@ -191,6 +192,10 @@ function Forth(next) {
     next({
       readLine: readLine,
       readLines: readLines,
+      keydown: function (keyCode) {
+        context.memory.setValue(context.memory.getVariable("last-key"), keyCode);
+        context.keydown && context.keydown(keyCode);
+      },
       getStack: function () {
         return context.stack.print();
       },

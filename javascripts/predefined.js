@@ -191,10 +191,23 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(Math.floor(Math.random() * range));
   });
 
-  readLines([
-    "令\啥\读\印\毕",
+  addToDictionary("key", function (context) {
+    context.pause = true;
 
-    "变\像", // start of graphics memory
-    "575\扩", // graphics memory takes 24 * 24 = 576 cells altogether
+    // set callback for when key is pressed
+    context.keydown = function (keyCode) {
+      context.pause = false;
+      context.keydown = null;
+      context.stack.push(keyCode);
+      context.onContinue();
+    };
+  });
+
+  readLines([
+    "令啥读印毕",
+
+    "变像", // start of graphics memory
+    "575扩", // graphics memory takes 24 * 24 = 576 cells altogether
+    "变last-key", // start of graphics memory
   ], next);
 }

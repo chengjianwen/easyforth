@@ -103,6 +103,23 @@ function Editor(selectorOrElement) {
       });
     }
 
+    $input.on("keydown", function (e) {
+      if (inputHidden) { // any time the input is hidden, send keys to forth
+        forth.keydown(e.keyCode);
+        e.preventDefault();
+      } else if (e.keyCode === 13) { // Enter/Return
+        e.preventDefault(); // don't actually insert newline
+        readInput();
+        adjustScroll();
+      } else if (e.keyCode === 38) { // Up
+        e.preventDefault();
+        selectPreviousLine();
+      } else if (e.keyCode == 40) { // Down
+        e.preventDefault();
+        selectNextLine();
+      }
+    });
+
     $editor.click(function (e) {
       // Don't include clicks on prev lines or we won't be able to select that text
       if ($(e.target).closest('.prev-lines').length === 0) {
