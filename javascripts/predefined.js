@@ -103,11 +103,11 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   });
 
   addToDictionary("对", function (context) {
-    context.stack.push(context.stack.pop() === 0 ? TRUE : FALSE);
+    context.stack.push(context.stack.pop() != FALSE ? TRUE : FALSE);
   });
 
   addToDictionary("错", function (context) {
-    context.stack.push(context.stack.pop() != 0 ? TRUE : FALSE);
+    context.stack.push(context.stack.pop() == FALSE ? TRUE : FALSE);
   });
 
   addToDictionary("小", function (context) {

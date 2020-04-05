@@ -348,7 +348,7 @@ Forth提供有一些预先定义的令字，然而用户也可以定义自己的
 
 结果你会看到下面的栈情：
 
-{% include stack.html stack="273" %}
+{% include stack.html stack="243" %}
 
 ## 道理运算
 
