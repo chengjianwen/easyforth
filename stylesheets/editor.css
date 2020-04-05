@@ -95,6 +95,10 @@
   color: white;
 }
 
+.editor-preview .code {
+  color: black;
+}
+
 .output {
   color: white;
 }
