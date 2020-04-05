@@ -22,7 +22,7 @@ function Forth(next) {
   var currentDefinition = null;
 
   function MissingWordError(word) {
-    this.message = word + " ? ";
+    this.message = word + "没有定义";
   }
 
   function namedFunction(name, func) {
@@ -96,13 +96,13 @@ function Forth(next) {
 
   function executeRuntimeAction(tokenizer, action, next) {
     switch (action.code) {
-    case "variable":
+    case "变":
       createVariable(tokenizer.nextToken().value);
       break;
-    case "constant":
+    case "常":
       createConstant(tokenizer.nextToken().value, context.stack.pop());
       break;
-    case ":":
+    case "令":
       startDefinition(tokenizer.nextToken().value);
       break;
     default:
@@ -194,7 +194,7 @@ function Forth(next) {
       readLine: readLine,
       readLines: readLines,
       keydown: function (keyCode) {
-        context.memory.setValue(context.memory.getVariable("last-key"), keyCode);
+        context.memory.setValue(context.memory.getVariable("码"), keyCode);
         context.keydown && context.keydown(keyCode);
       },
       getStack: function () {
@@ -202,7 +202,7 @@ function Forth(next) {
       },
       setMemoryHandler: function (cb) {
         context.onMemoryChange = function (address, value) {
-          cb(address, value, context.memory.getVariable("graphics"));
+          cb(address, value, context.memory.getVariable("像"));
         };
       }
     });

@@ -17,12 +17,11 @@ function Stack(name) {
       if (arr.length > 0) {
         return arr.pop();
       } else {
-        console.warn("取“" + name + "”时发现栈已空");
+        console.warn("读“" + name + "”时栈已空");
         throw new StackUnderflowError();
       }
     },
     print: function () {
-      alert(arr.length);
       return arr.join(" ");
     }
   };

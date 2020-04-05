@@ -7,17 +7,17 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   }
 
   [
-    ":", ";", "if", "else", "then", "do", "loop",
-    "+loop", "begin", "until", "variable", "constant", "key"
+    "令", "毕", "若", "否", "则", "复", "返",
+    "直", "返", "变", "常", "键"
   ].forEach(function (code) {
     addToDictionary(code, controlCode(code));
   });
 
-  addToDictionary(".",  function (context) {
+  addToDictionary("印",  function (context) {
     return context.stack.pop() + " ";
   });
 
-  addToDictionary(".s", function (context) {
+  addToDictionary("栈", function (context) {
     return "\n" + context.stack.print();
   });
 
@@ -79,26 +79,12 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(~context.stack.pop());
   });
 
-  addToDictionary("i", function (context) {
+  addToDictionary("报", function (context) {
     context.stack.push(context.returnStack.peek(1));
   });
 
-  addToDictionary("j", function (context) {
+  addToDictionary("止", function (context) {
     context.stack.push(context.returnStack.peek(2));
-  });
-
-  // I don't understand the difference between i and r@
-  // http://www.forth.com/starting-forth/sf5/sf5.html
-  addToDictionary("r@", function (context) {
-    context.stack.push(context.returnStack.peek(1));
-  });
-
-  addToDictionary(">r", function (context) {
-    context.returnStack.push(context.stack.pop());
-  });
-
-  addToDictionary("r>", function (context) {
-    context.stack.push(context.returnStack.pop());
   });
 
   addToDictionary("字", function (context) {
@@ -124,7 +110,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(b);
   });
 
-  addToDictionary("rot", function (context) {
+  addToDictionary("翻", function (context) {
     var a = context.stack.pop(), b = context.stack.pop(), c = context.stack.pop();
     context.stack.push(b);
     context.stack.push(a);
@@ -135,23 +121,23 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.pop();
   });
 
-  addToDictionary("置", function (context) {
+  addToDictionary("写", function (context) {
     var address = context.stack.pop();
     var value = context.stack.pop();
     context.memory.setValue(address, value);
     context.onMemoryChange && context.onMemoryChange(address, value);
   });
 
-  addToDictionary("取", function (context) {
+  addToDictionary("读", function (context) {
     var address = context.stack.pop();
     context.stack.push(context.memory.getValue(address));
   });
 
-  addToDictionary("allot", function (context) {
+  addToDictionary("扩", function (context) {
     context.memory.allot(context.stack.pop());
   });
 
-  addToDictionary("key", function (context) {
+  addToDictionary("键", function (context) {
     context.pause = true;
 
     // set callback for when key is pressed
@@ -173,36 +159,24 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     }, timeout);
   });
 
-  addToDictionary("random", function (context) {
+  addToDictionary("机", function (context) {
     var range = context.stack.pop();
     context.stack.push(Math.floor(Math.random() * range));
   });
 
   readLines([
-    ": cells   1 * ;",
-    ": cr      10 emit ;",
-    ": space   32 emit ;",
-    ": spaces  0 do space loop ;",
-    ": 0=      0 = ;",
-    ": 0<      0 < ;",
-    ": 0>      0 > ;",
-    ": ?dup    dup if dup then ;",
-    ": 2dup    over over ;",
-    ": 1+      1 + ;",
-    ": 1-      1 - ;",
-    ": 2+      2 + ;",
-    ": 2-      2 - ;",
-    ": 2*      2 * ;",
-    ": 2/      2 / ;",
-    ": negate  -1 * ;",
-    ": abs     dup 0< if negate then ;",
-    ": min     2dup < if drop else swap drop then ;",
-    ": max     2dup < if swap drop else drop then ;",
-    ": ?       @ . ;",
-    ": +!      dup @ rot + swap ! ;",
+    "令\回\10\字\毕",
+    "令\空\32\字\毕",
+    "令\零\0\同\毕",
+    "令\增\1\和\毕",
+    "令\减\1\差\毕",
+    "令\倍\2\积\毕",
+    "令\衰\2\商\毕",
+    "令\负\-1\积\毕",
+    "令\啥\读\印\毕",
 
-    "variable  graphics", // start of graphics memory
-    "575 cells allot", // graphics memory takes 24 * 24 = 576 cells altogether
-    "variable  last-key", // create last-key variable for keyboard input
+    "变\像", // start of graphics memory
+    "575\扩", // graphics memory takes 24 * 24 = 576 cells altogether
+    "变\码", // 保存按键码的变数
   ], next);
 }
