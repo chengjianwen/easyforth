@@ -17,6 +17,18 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     return context.stack.pop() + " ";
   });
 
+  addToDictionary("回",  function (context) {
+    return "\n";
+  });
+
+  addToDictionary("空",  function (context) {
+    return "";
+  });
+
+  addToDictionary("跳",  function (context) {
+    return "\t";
+  });
+
   addToDictionary("栈", function (context) {
     return "\n" + context.stack.print();
   });
@@ -147,14 +159,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(a);
   });
 
-  addToDictionary("倒", function (context) {
-    var a = context.stack.pop(), b = context.stack.pop();
-    context.stack.push(b);
-    context.stack.push(a);
-    context.stack.push(b);
-  });
-
-  addToDictionary("翻", function (context) {
+  addToDictionary("挖", function (context) {
     var a = context.stack.pop(), b = context.stack.pop(), c = context.stack.pop();
     context.stack.push(b);
     context.stack.push(a);
@@ -187,8 +192,6 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   });
 
   readLines([
-    "令\回\10\字\毕",
-    "令\空\32\字\毕",
     "令\啥\读\印\毕",
 
     "变\像", // start of graphics memory
