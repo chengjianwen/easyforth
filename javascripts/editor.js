@@ -32,7 +32,7 @@ function Editor(selectorOrElement) {
     }
 
     function updateStack() {
-      $stack.text("你" + forth.getStack());
+      $stack.text(forth.getStack());
     }
 
     function hideInput() {
