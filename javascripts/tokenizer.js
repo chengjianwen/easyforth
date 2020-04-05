@@ -3,30 +3,10 @@
 function Tokenizer(input) {
   var index = 0;
   var length = input.length;
-  var stringMode = false;
-  var whitespace = /\s+/;
-  var validToken = /\S+/;
 
-  function skipWhitespace() {
-    while (whitespace.test(input[index]) && index < length) {
-      index++;
-    }
-  }
-
-  // Does input have these characters at this index?
-  function hasCharsAtIndex(tokens, startIndex) {
-    for (var i = 0; i < tokens.length; i++) {
-      if (input[startIndex + i] != tokens[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function processString() {
+  function processString(pcre) {
     var value = "";
-    index += 3; // skip over ." and space
-    while (input[index] !== '"' && index < length) {
+    while (pcre.test(input[index]) && index < length) {
       value += input[index];
       index++;
     }
@@ -53,12 +33,22 @@ function Tokenizer(input) {
   }
 
   function getNextToken() {
-    skipWhitespace();
-    var isStringLiteral = hasCharsAtIndex('." ', index);
-    var isParenComment = hasCharsAtIndex('( ', index);
-    var isSlashComment = hasCharsAtIndex('\\ ', index);
+    var whitespace = /\s+/;
+    var han = /[\u4E00-\uFA29]/;
+    var english = /[a-z]/i;
+    var digital = /[0-9]/;
 
     var value = "";
+
+    if (han.test(input[index]) && index < length)
+      value = input[index];
+    else if (digital.test(input[index]) && index < length)
+      value = processString(digital);
+    else if (english.test(input[index]) && index < length)
+      value = processString(english);
+    }
+    else if (whitespace.test(input[index]) && index < length)
+      processString(whitespace);
 
     if (isStringLiteral) {
       value = processString();
