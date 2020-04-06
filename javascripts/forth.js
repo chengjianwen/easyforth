@@ -32,6 +32,7 @@ function Forth(next) {
   // Convert token into an action that executes that token's behavior
   function tokenToAction(token) {
     var word = token.value;
+    console.log("字: " + word);
 
     if (token.isWord) {
       var definition = context.dictionary.lookup(word);
@@ -40,7 +41,6 @@ function Forth(next) {
       else
           throw new MissingWordError(word);
     } else if (isFinite(word)) {
-      console.log("数字:" + word);
       return namedFunction("Number: " + word, function (context) {
         context.stack.push(+word);
       });
