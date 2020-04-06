@@ -4,9 +4,9 @@ function Tokenizer(input) {
   var index = 0;
   var length = input.length;
 
-  function processMore(pcre) {
+  function processMore(r) {
     var v = "";
-    while (pcre.test(input[index]) && index < length) {
+    while (r.test(input[index]) && index < length) {
       v += input[index];
       index++;
     }
@@ -14,30 +14,50 @@ function Tokenizer(input) {
   }
 
   function getNextToken() {
-    var han = /[\u4E00-\uFA29]/;
-    var english = /[a-z]/i;
-    var digital = /[0-9]|-/;
+    var cjkWord = {
+        beginWith: /[\u4E00-\uFA29]/,
+        contains: null
+    }
+    var engWord = {
+        beginWith: /[a-z]/i,
+        contains: /[a-z]/i
+    }
+    var numStr = {
+        beginWith: /[1-9]|-/,
+        contains: /[0-9]|e|./
+    }
+    var spaceStr = {
+        beginWith: / /,
+        contains: / /
+    }
 
     var isWord = false;
     var value = "";
 
-    if (han.test(input[index]) && index < length) {
+    if (cjkWord.beginWith.test(input[index]) && index < length) {
       value = input[index];
       index++;
       isWord = true;
     }
-    else if (digital.test(input[index]) && index < length) {
+    else if (engWord.beginWith.test(input[index]) && index < length) {
       value = input[index];
       index++;
-      value += processMore(digital);
-      isWord = false;
-    }
-    else if (english.test(input[index]) && index < length) {
-      value = input[index];
-      index++;
-      value += processMore(english);
+      value += processMore(engWord.contains);
       isWord = true;
-    } else if (index < length) {
+    }
+    else if (numStr.beginWith.test(input[index]) && index < length) {
+      value = input[index];
+      index++;
+      value += processMore(numStr.contains);
+      isWord = true;
+    } 
+    else if (spaceStr.beginWith.test(input[index]) && index < length) {
+      index++;
+      processMore(spaceStr.contains);
+      return getNextToken(); // ignore this token and return the next one
+    } 
+    else if (index < length) {
+      // THIS INVALID CHARACTER WAS IGNORED!
       index++;
       return getNextToken(); // ignore this token and return the next one
     }
