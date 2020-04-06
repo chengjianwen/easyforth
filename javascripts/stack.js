@@ -21,7 +21,7 @@ function Stack(name) {
       }
     },
     print: function () {
-      return "&nbsp;" + arr.join(" ");
+      return " " + arr.join(" ");
     }
   };
 }
