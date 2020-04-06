@@ -49,7 +49,7 @@ function Tokenizer(input) {
       value = input[index];
       index++;
       value += processMore(numStr.contains);
-      isWord = true;
+      isWord = false;
     } 
     else if (spaceStr.beginWith.test(input[index]) && index < length) {
       index++;
