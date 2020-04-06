@@ -1,5 +1,5 @@
 function StackUnderflowError() {
-  this.message = "栈已空！";
+  this.message = "空栈！";
 }
 
 function Stack(name) {
