@@ -32,7 +32,6 @@ function Forth(next) {
   // Convert token into an action that executes that token's behavior
   function tokenToAction(token) {
     var word = token.value;
-    console.log("字: " + word);
 
     if (token.isWord) {
       var definition = context.dictionary.lookup(word);
@@ -127,8 +126,8 @@ function Forth(next) {
     // processNextToken recursively executes tokens
     function processNextToken() {
       var nextToken = tokenizer.nextToken();
-    console.log(nextToken);
 
+      console.log("字: " + nextToken ? nextToken.value : "");
       if (!nextToken) { // reached end of line
         if (!currentDefinition) { // don't append output while definition is in progress
           context.addOutput(" 完成！");
