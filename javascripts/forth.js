@@ -24,18 +24,9 @@ function Forth(next) {
     this.message = "“" + word + "”未定义！";
   }
 
-  function InvalidDigitalError(number) {
-    this.message = "“" + word + "”不合法！";
-  }
-
   function namedFunction(name, func) {
     func._name = name;
     return func;
-  }
-
-  function isValidNumber(n) {
-    var p = /^(-?\d+\.\d+)$|^(-?\d+)$/;
-    return p.test(n);
   }
 
   // Convert token into an action that executes that token's behavior
@@ -48,13 +39,12 @@ function Forth(next) {
           return definition;
       else
           throw new MissingWordError(word);
-    } else if (!isValidNumber(word)) {
-          throw new InvalidDigitalError(word);
-    } else
-
+    } else if (isFinite(word)) {
       return namedFunction("Number: " + word, function (context) {
-        context.stack.push(+word);
+        context.stack.push(word);
       });
+    } else
+      throw new MissingWordError(word);
 
     return function () {
       return "";
