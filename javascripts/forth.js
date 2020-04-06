@@ -41,7 +41,7 @@ function Forth(next) {
           throw new MissingWordError(word);
     } else if (isFinite(word)) {
       return namedFunction("Number: " + word, function (context) {
-        context.stack.push(word);
+        context.stack.push(+word);
       });
     } else
       throw new MissingWordError(word);
