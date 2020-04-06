@@ -40,6 +40,7 @@ function Forth(next) {
       else
           throw new MissingWordError(word);
     } else if (isFinite(word)) {
+      console.log("数字:" + word);
       return namedFunction("Number: " + word, function (context) {
         context.stack.push(+word);
       });
