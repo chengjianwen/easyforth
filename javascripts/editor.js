@@ -8,7 +8,6 @@ function Editor(selectorOrElement) {
     var $prevLines = $text.find(".prev-lines");
     var $input = $text.find(".input");
     var $stack = $editor.find(".stack-viewer");
-    console.log($input);
     var graphics = Graphics($editor.find(".canvas"));
     var $window = $(window);
     var lineBuffer = [""]; // Start line buffer with blank line
@@ -47,7 +46,6 @@ function Editor(selectorOrElement) {
     }
 
     function readInput() {
-      console.log("value" + $input.val());
       var code = $input.val();
       var codeLines = code.split("\n");
 
@@ -150,7 +148,7 @@ function Editor(selectorOrElement) {
     }
   });
 }
-
+console.log('here');
 $(".editor").each(function (i, el) {
   Editor(el);
 });
