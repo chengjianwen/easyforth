@@ -84,7 +84,7 @@ function Forth(next) {
   }
 
   function addActionToCurrentDefinition(action) {
-    if (action.code === ";") {
+    if (action.code === "毕") {
       endDefinition();
     } else {
       currentDefinition.actions.push(action);

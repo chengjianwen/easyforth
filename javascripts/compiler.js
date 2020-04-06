@@ -167,7 +167,7 @@ function compile(dictionary, actions) {
     actions.forEach(function (action) {
       if (action.isControlCode) {
         switch (action.code) {
-          case "if":
+          case "若":
             currentControlStructure = new Conditional(currentContext, currentControlStructure);
             currentContext.push(currentControlStructure);
             // context is conditional consequent now
@@ -185,7 +185,7 @@ function compile(dictionary, actions) {
             // context is loop body now
             currentContext = currentControlStructure.body;
             break;
-          case "else":
+          case "否":
             // context is conditional alternative now
             currentContext = currentControlStructure.alternative;
             break;
@@ -193,8 +193,8 @@ function compile(dictionary, actions) {
             // +loop is special case of loop
             currentControlStructure.isPlusLoop = true;
             // fallthrough
-          case "then":
-          case "loop":
+          case "则":
+          case "复":
           case "until":
             // context is parent context now
             currentContext = currentControlStructure.parentContext;
