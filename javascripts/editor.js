@@ -148,7 +148,7 @@ function Editor(selectorOrElement) {
     }
   });
 }
-console.log('here');
 $(".editor").each(function (i, el) {
   Editor(el);
+  console.log("Here");
 });
