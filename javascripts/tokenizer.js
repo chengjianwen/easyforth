@@ -16,7 +16,7 @@ function Tokenizer(input) {
   function getNextToken() {
     var han = /[\u4E00-\uFA29]/;
     var english = /[a-z]/i;
-    var digital = /[0-9]/;
+    var digital = /[0-9]-/;
 
     var isWord = false;
     var value = "";
