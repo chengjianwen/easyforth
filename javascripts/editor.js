@@ -8,6 +8,7 @@ function Editor(selectorOrElement) {
     var $prevLines = $text.find(".prev-lines");
     var $input = $text.find(".input");
     var $stack = $editor.find(".stack-viewer");
+    console.log($input);
     var graphics = Graphics($editor.find(".canvas"));
     var $window = $(window);
     var lineBuffer = [""]; // Start line buffer with blank line
@@ -104,7 +105,6 @@ function Editor(selectorOrElement) {
     }
 
     $input.on("keydown", function (e) {
-      console.log(e.keyCode);
       if (inputHidden) { // any time the input is hidden, send keys to forth
         forth.keydown(e.keyCode);
         e.preventDefault();
