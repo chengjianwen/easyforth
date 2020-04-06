@@ -150,5 +150,4 @@ function Editor(selectorOrElement) {
 }
 $(".editor").each(function (i, el) {
   Editor(el);
-  console.log("Here");
 });

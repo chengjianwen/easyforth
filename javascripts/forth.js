@@ -189,7 +189,7 @@ function Forth(next) {
       readLine: readLine,
       readLines: readLines,
       keydown: function (keyCode) {
-        context.memory.setValue(context.memory.getVariable("last-key"), keyCode);
+        context.memory.setValue(context.memory.getVariable("lastkey"), keyCode);
         context.keydown && context.keydown(keyCode);
       },
       getStack: function () {

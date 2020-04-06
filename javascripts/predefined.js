@@ -208,6 +208,6 @@ function addPredefinedWords(addToDictionary, readLines, next) {
 
     "变像", // start of graphics memory
     "575扩", // graphics memory takes 24 * 24 = 576 cells altogether
-    "变last-key", // start of graphics memory
+    "变lastkey", // start of graphics memory
   ], next);
 }
