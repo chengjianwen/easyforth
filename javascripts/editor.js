@@ -47,7 +47,6 @@ function Editor(selectorOrElement) {
 
     function readInput() {
       var code = $input.val();
-      console.log(code);
       var codeLines = code.split("\n");
 
       var $line;
@@ -105,6 +104,7 @@ function Editor(selectorOrElement) {
     }
 
     $input.on("keydown", function (e) {
+      console.log(e.keyCode);
       if (inputHidden) { // any time the input is hidden, send keys to forth
         forth.keydown(e.keyCode);
         e.preventDefault();
