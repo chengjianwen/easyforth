@@ -17,7 +17,6 @@ function Stack(name) {
       if (arr.length > 0) {
         return arr.pop();
       } else {
-        console.warn("读“" + name + "”时栈已空");
         throw new StackUnderflowError();
       }
     },
