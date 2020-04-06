@@ -32,21 +32,17 @@ function Forth(next) {
   // Convert token into an action that executes that token's behavior
   function tokenToAction(token) {
     var word = token.value;
-    var definition = context.dictionary.lookup(word);
 
-    if (token.isStringLiteral) {
-      return namedFunction("String: " + word, function (context) {
-        return word;
-      });
-    } else if (definition !== null) {
-      return definition;
-    } else if (isFinite(word)) {
+    if (token.isWord) {
+      var definition = context.dictionary.lookup(word);
+      if (definition !== null)
+          return definition;
+      else
+          throw new MissingWordError(word);
+    } else
       return namedFunction("Number: " + word, function (context) {
         context.stack.push(+word);
       });
-    } else {
-      throw new MissingWordError(word);
-    }
 
     return function () {
       return "";
