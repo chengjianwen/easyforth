@@ -31,6 +31,7 @@ function Tokenizer(input) {
       index++;
       value += processMore(digital);
       isWord = false;
+      console.log("数字: " + value);
     }
     else if (english.test(input[index]) && index < length) {
       value = input[index];
