@@ -127,6 +127,7 @@ function Forth(next) {
     // processNextToken recursively executes tokens
     function processNextToken() {
       var nextToken = tokenizer.nextToken();
+    console.log(nextToken);
 
       if (!nextToken) { // reached end of line
         if (!currentDefinition) { // don't append output while definition is in progress
@@ -142,7 +143,6 @@ function Forth(next) {
         addActionToCurrentDefinition(action);
         processTokens();
       } else {
-
         executeRuntimeAction(tokenizer, action, function (output) {
           context.addOutput(output);
 
