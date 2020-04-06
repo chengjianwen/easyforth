@@ -5,12 +5,12 @@ function Tokenizer(input) {
   var length = input.length;
 
   function processMore(pcre) {
-    var value = "";
+    var v = "";
     while (pcre.test(input[index]) && index < length) {
-      value += input[index];
+      v += input[index];
       index++;
     }
-    return value;
+    return v;
   }
 
   function getNextToken() {
@@ -31,7 +31,7 @@ function Tokenizer(input) {
       index++;
       value += processMore(digital);
       isWord = false;
-      console.log("数字: " + value);
+      console.log(value);
     }
     else if (english.test(input[index]) && index < length) {
       value = input[index];

@@ -127,7 +127,6 @@ function Forth(next) {
     function processNextToken() {
       var nextToken = tokenizer.nextToken();
 
-      console.log("字: " + nextToken ? nextToken.value : "");
       if (!nextToken) { // reached end of line
         if (!currentDefinition) { // don't append output while definition is in progress
           context.addOutput(" 完成！");
