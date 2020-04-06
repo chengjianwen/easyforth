@@ -47,6 +47,7 @@ function Editor(selectorOrElement) {
     }
 
     function readInput() {
+      console.log("value" + $input.val());
       var code = $input.val();
       var codeLines = code.split("\n");
 
