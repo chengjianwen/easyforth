@@ -99,7 +99,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   });
 
   addToDictionary("等", function (context) {
-    context.stack.push(context.stack.pop() === context.stack.pop() ? TRUE : FALSE);
+    context.stack.push(context.stack.pop() == context.stack.pop() ? TRUE : FALSE);
   });
 
   addToDictionary("是", function (context) {

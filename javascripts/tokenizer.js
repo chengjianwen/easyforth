@@ -23,7 +23,7 @@ function Tokenizer(input) {
         contWith: /[a-z]/i
     }
     var numStr = {
-        beginWith: /[1-9]|-/,
+        beginWith: /[0-9]|-/,
         contWith: /[0-9]|e|\./
     }
     var spaceStr = {
