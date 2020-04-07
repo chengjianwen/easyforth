@@ -565,7 +565,7 @@ Forth中“非”用“0”表示，而“是”则用一个“-1”表示。
 
 它会产生下面的结果：
 
-<div class="editor-preview editor-text">工<span class="output"> 0 1 2 3 4 5 6 7 8 9  完成！</span></div>
+<div class="editor-preview editor-text">例<span class="output"> 0 1 2 3 4 5 6 7 8 9  完成！</span></div>
 
 程序“10 0报印返”的意思就是“依次从0到10运行：显示反复值”。
 

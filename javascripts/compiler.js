@@ -173,13 +173,13 @@ function compile(dictionary, actions) {
             // context is conditional consequent now
             currentContext = currentControlStructure.consequent;
             break;
-          case "do":
+          case "复":
             currentControlStructure = new DoLoop(currentContext, currentControlStructure);
             currentContext.push(currentControlStructure);
             // context is loop body now
             currentContext = currentControlStructure.body;
             break;
-          case "begin":
+          case "直":
             currentControlStructure = new BeginUntil(currentContext, currentControlStructure);
             currentContext.push(currentControlStructure);
             // context is loop body now
@@ -189,13 +189,8 @@ function compile(dictionary, actions) {
             // context is conditional alternative now
             currentContext = currentControlStructure.alternative;
             break;
-          case "+loop":
-            // +loop is special case of loop
-            currentControlStructure.isPlusLoop = true;
-            // fallthrough
           case "则":
-          case "复":
-          case "until":
+          case "返":
             // context is parent context now
             currentContext = currentControlStructure.parentContext;
             currentControlStructure = currentControlStructure.parentControlStructure;
