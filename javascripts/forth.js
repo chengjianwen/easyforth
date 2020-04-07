@@ -99,7 +99,7 @@ function Forth(next) {
     case "常":
       createConstant(tokenizer.nextToken().value, context.stack.pop());
       break;
-    case "令":
+    case "定":
       startDefinition(tokenizer.nextToken().value);
       break;
     default:

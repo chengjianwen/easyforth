@@ -7,7 +7,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   }
 
   [
-    "令", "毕", "若", "否", "则", "复", "返",
+    "定", "毕", "若", "否", "则", "复", "返",
     "直", "返", "变", "常"
   ].forEach(function (code) {
     addToDictionary(code, controlCode(code));
@@ -17,7 +17,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     return context.stack.pop() + " ";
   });
 
-  addToDictionary("回",  function (context) {
+  addToDictionary("行",  function (context) {
     return "\n";
   });
 
@@ -98,15 +98,15 @@ function addPredefinedWords(addToDictionary, readLines, next) {
     context.stack.push(Math.pow(b, a));
   });
 
-  addToDictionary("同", function (context) {
+  addToDictionary("等", function (context) {
     context.stack.push(context.stack.pop() === context.stack.pop() ? TRUE : FALSE);
   });
 
-  addToDictionary("对", function (context) {
+  addToDictionary("是", function (context) {
     context.stack.push(context.stack.pop() != FALSE ? TRUE : FALSE);
   });
 
-  addToDictionary("错", function (context) {
+  addToDictionary("非", function (context) {
     context.stack.push(context.stack.pop() == FALSE ? TRUE : FALSE);
   });
 
@@ -204,7 +204,7 @@ function addPredefinedWords(addToDictionary, readLines, next) {
   });
 
   readLines([
-    "令啥读印毕",
+    "定啥读印毕",
 
     "变像", // start of graphics memory
     "575扩", // graphics memory takes 24 * 24 = 576 cells altogether
