@@ -292,6 +292,7 @@
       }
     } // end init
 
+    var result = null;
     function run() {
       var content = JSON.parse(myDiagram.model.toJson());
       var nodes = content.nodeDataArray;
@@ -327,7 +328,6 @@
       var first = firstNode();
       var last = lastNode();
       var current = nextNode(first);
-      var result = null;
       while(current != last) {
         var node = getNode(current);
         var codeLines = node.text.split("\n");
