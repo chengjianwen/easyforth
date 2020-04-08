@@ -16,5 +16,6 @@ layout: flowchart
     {% include editor.html %}
   </div>
   <textarea id="mySavedModel" style="width:100%;height:300px;display:block;">
+{% include model.json %}
   </textarea>
 </div>
