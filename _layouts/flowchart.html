@@ -308,10 +308,13 @@
             return nodes[i].key;
         return null;
       }
-      function nextNode(key) {
+      function nextNode(key, condition) {
         for (var i = 0; i < links.length; i++)
           if (links[i].from == key)
-            return links[i].to;
+            if (condition && links[i].text == condition)
+              return links[i].to;
+            else if (!condition)
+              return links[i].to;
         return null;
       }
       function getNode(key) {
@@ -327,6 +330,7 @@
       while(current != last) {
         var node = getNode(current);
         var codeLines = node.text.split("\n");
+        var result = null;
 
         Forth(function(forth) {
           forth.readLines(codeLines, {
@@ -334,12 +338,15 @@
               console.log("执行: " + codeLine);
             },
             outputCallback: function (output) {
+              console.log(output);
             }
           }, function () {
             console.log("栈: " + forth.getStack());
+            if (node.category == "Conditional"
+              result = forth.context.stack.pop();
           });
         });
-        current = nextNode(current);
+        current = nextNode(current, result);
       }
     }
 
