@@ -335,7 +335,7 @@
           forth.readLines(codeLines, {
             lineCallback: function (codeLine) {
               console.log("执行: " + codeLine);
-            }, null
+            }
           }, function () {
             console.log("栈: " + forth.getStack());
           });
