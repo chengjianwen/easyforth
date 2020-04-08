@@ -5,9 +5,6 @@
   <title>流程图编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="stylesheets/styles.css">
-  <link rel="stylesheet" href="stylesheets/editor.css">
-  <link rel="stylesheet" href="stylesheets/github-light.css">
   <script src="javascripts/jquery-2.1.4.js"></script>
   <script src="javascripts/scale.fix.js"></script>
   <script src="javascripts/stack.js"></script>
@@ -17,8 +14,6 @@
   <script src="javascripts/compiler.js"></script>
   <script src="javascripts/predefined.js"></script>
   <script src="javascripts/forth.js"></script>
-  <script src="javascripts/graphics.js"></script>
-  <script src="javascripts/editor.js"></script>
   <script src="javascripts/go.js"></script>
   <script id="code">
     function init() {
@@ -331,13 +326,25 @@
 
       var first = firstNode();
       var last = lastNode();
-      for (var i = nextNode(first); i != last; i = nextNode(i))   {
-        var node = getNode(i);
-        if ($(".input")[0].value != "")
-          $(".input")[0].value += "\n";
-        $(".input")[0].value += "\n" + node.text;
+      var current = nextNode(first);
+      while( current != last) {
+        var node = getNode(current);
+        var codeLines = node.text.split("\n");
+
+        Forth(function(forth) {
+          forth.readLines(codeLines, {
+            lineCallback: function (codeLine) {
+              console.log("执行: " + codeLine);
+            },
+            outputCallback: function (output) {
+              console.log("结果: " + output);
+            }
+          }, function () {
+            console.log("栈: " + forth.getStack());
+          });
+        });
+        current = nextNode(current);
       }
-      Editor($(".editor")[0]);
     }
 
     function cls() {
