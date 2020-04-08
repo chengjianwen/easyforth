@@ -1,7 +1,7 @@
 safe: true
 lsi: false
 kramdown:
-  toc_levels: 1..3
+  toc_levels: 1..2
 
 title: Easyforth
 description: Learn Forth!
