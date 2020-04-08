@@ -304,14 +304,40 @@
       var content = JSON.parse(myDiagram.model.toJson());
       var nodes = content.nodeDataArray;
       var links = content.linkDataArray;
-      for (var i = 0; i < links.length - 1; i++)
-        for (var j = 0; j < nodes.length; j++)
-          if (nodes[j].key == links[i].to) {
-            $(".input")[0].value += "\n" + nodes[j].text;
-            continue;
-          }
+      function firstNode() {
+        for (var i = 0; i < nodes.length; i++)
+          if (nodes[i].category == "Start")
+            return nodes[i].key;
+        return null;
+      }
+      function lastNode() {
+        for (var i = 0; i < nodes.length; i++)
+          if (nodes[i].category == "End")
+            return nodes[i].key;
+        return null;
+      }
+      function nextNode(key) {
+        for (var i = 0; i < links.length; i++)
+          if (links[i].from == key)
+            return links[i].to;
+        return null;
+      }
+      function getNode(key) {
+        for (var i = 0; i < nodes.length; i++)
+          if (nodes[i].key == key)
+            return nodes[i];
+        return null;
+      }
+
+      var first = firstNode();
+      var last = lastNode();
+      for (var i = nextNode(first); i != last; i = nextNode(i))   {
+        var node = getNode(i);
+        $(".input")[0].value += "\n" + node.text;
+      }
       Editor($(".editor")[0]);
     }
+
     function cls() {
       $(".prev-lines").empty();
     }
