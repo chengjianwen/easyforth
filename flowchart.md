@@ -15,5 +15,7 @@ layout: flowchart
     {% include diagram.html %}
     {% include forth.html %}
   </div>
-  {% include model.html display="block"%}
+  <textarea id="mySavedModel" style="width:100%;height:300px;display:block;">
+  {% include model.json %}
+  </textarea>
 </div>
