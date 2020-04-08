@@ -333,6 +333,8 @@
       var last = lastNode();
       for (var i = nextNode(first); i != last; i = nextNode(i))   {
         var node = getNode(i);
+        if ($(".input")[0].value != "")
+          $(".input")[0].value += "\n";
         $(".input")[0].value += "\n" + node.text;
       }
       Editor($(".editor")[0]);
