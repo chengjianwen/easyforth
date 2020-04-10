@@ -2,18 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>流程图编程</title>
+  <title>栈式编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="javascripts/jquery-2.1.4.js"></script>
   <script src="javascripts/scale.fix.js"></script>
   <script src="javascripts/stack.js"></script>
-  <script src="javascripts/dictionary.js"></script>
-  <script src="javascripts/memory.js"></script>
-  <script src="javascripts/tokenizer.js"></script>
-  <script src="javascripts/compiler.js"></script>
-  <script src="javascripts/predefined.js"></script>
-  <script src="javascripts/forth.js"></script>
   <script src="javascripts/go.js"></script>
   <script id="code">
     function init() {
@@ -103,7 +97,7 @@
           $$(go.Panel, "Auto",
             $$(go.Shape, "Rectangle",
               { fill: "#282c34", stroke: "#00A9C9", strokeWidth: 3.5 },
-              new go.Binding("figure", "figure")),
+              new go.Binding("fill", "fill")),
             $$(go.TextBlock, textStyle(),
               {
                 margin: 8,
@@ -126,7 +120,7 @@
           $$(go.Panel, "Auto",
             $$(go.Shape, "Diamond",
               { fill: "#282c34", stroke: "#00A9C9", strokeWidth: 3.5 },
-              new go.Binding("figure", "figure")),
+              new go.Binding("fill", "fill")),
             $$(go.TextBlock, textStyle(),
               {
                 margin: 8,
@@ -171,7 +165,6 @@
           makePort("R", go.Spot.Right, go.Spot.Right, false, true)
         ));
 
-      // taken from ../extensions/Figures.js:
       go.Shape.defineFigureGenerator("File", function(shape, w, h) {
         var geo = new go.Geometry();
         var fig = new go.PathFigure(0, 0, true); // starting point
@@ -293,67 +286,76 @@
     } // end init
 
     function run() {
-      var content = JSON.parse(myDiagram.model.toJson());
-      var nodes = content.nodeDataArray;
-      var links = content.linkDataArray;
+      var arr = [];
+      function push(v) {
+        arr.push(v);
+      }
+      function pop() {
+        return arr.pop();
+      }
+      var model = myDiagram.model;
       function firstNode() {
-        for (var i = 0; i < nodes.length; i++)
-          if (nodes[i].category == "Start")
-            return nodes[i].key;
+        for (var i = 0; i < model.nodeDataArray.length; i++)
+          if (model.nodeDataArray[i].category == "Start")
+            return model.nodeDataArray[i];
         return null;
       }
       function lastNode() {
-        for (var i = 0; i < nodes.length; i++)
-          if (nodes[i].category == "End")
-            return nodes[i].key;
+        for (var i = 0; i < model.nodeDataArray.length; i++)
+          if (model.nodeDataArray[i].category == "End")
+            return model.nodeDataArray[i];
         return null;
       }
-      function nextNode(key, condition) {
-        for (var i = 0; i < links.length; i++)
-          if (links[i].from == key)
-            if (condition && links[i].text == condition)
-              return links[i].to;
-            else if (!condition)
-              return links[i].to;
+      function nextLink(node, condition) {
+        for (var i = 0; i < model.linkDataArray.length; i++)
+          if (model.linkDataArray[i].from == node.key) {
+            if (!condition)
+              return model.linkDataArray[i];
+            else if (model.linkDataArray[i].text == condition)
+              return model.linkDataArray[i];
+          }
         return null;
       }
       function getNode(key) {
-        for (var i = 0; i < nodes.length; i++)
-          if (nodes[i].key == key)
-            return nodes[i];
+        for (var i = 0; i < model.nodeDataArray.length; i++)
+          if (model.nodeDataArray[i].key == key)
+            return model.nodeDataArray[i];
         return null;
       }
 
       var first = firstNode();
       var last = lastNode();
-      var current = nextNode(first);
-      while(current != last) {
-        var node = getNode(current);
-        var codeLines = node.text.split("\n");
-        Forth(function(forth) {
-          forth.readLines(codeLines, {
-            lineCallback: function (codeLine) {
-              console.log("执行: " + codeLine);
-            },
-            outputCallback: function (output) {
-              console.log(output);
-            }
-          }, function () {
-            console.log("栈: " + forth.getStack());
-          });
-          if (node.category == "Conditional")
-            ret = forth.stack.pop();
-          else
-            ret = null;
+      var current = getNode(nextLink(first).to);
+      var $viewer = $(".stack-viewer")[0];
+      function updateStack() {
+        while($viewer.firstChild)
+          $viewer.removeChild($viewer.lastChild);
+        arr.forEach(function (item) {
+          $("<div></div>").addClass("item").css("align-self", "center").text(item).appendTo($viewer);
         });
-
-        current = nextNode(current, ret);
       }
+      function setBackground(node, color) {
+        model.startTransaction("update locations");
+        model.setDataProperty(node, "fill", color);
+        model.commitTransaction("update locations");
+      }
+      var delay = 1000;
+      function execute() {
+        if (current != null && current != last) {
+          console.log("正在执行: " + current.text);
+          var condition = eval(current.text);
+          setBackground(current, "red");
+          updateStack();
+          setTimeout(function() {
+            setBackground(current, null);
+            current = getNode(nextLink(current, current.category == "Conditional" ? condition : null).to);
+            execute();
+          }, delay);
+        }
+      }
+      execute();
     }
 
-    function cls() {
-      $(".prev-lines").empty();
-    }
     function save() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
       myDiagram.isModified = false;
@@ -361,9 +363,15 @@
     function load() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     }
+    function zoomIn() {
+      myDiagram.scale *= 1.1;
+    }
+    function zoomOut() {
+      myDiagram.scale /= 1.1;
+    }
   </script>
 </head>
 <body onload="init()">
-{{ content }}
+  {{ content }}
 </body>
 </html>

@@ -196,6 +196,12 @@ function Forth(next) {
       getStack: function () {
         return context.stack.print();
       },
+      popStack: function () {
+        return context.stack.pop();
+      },
+      pushStack: function (item) {
+        context.stack.push(item);
+      },
       setMemoryHandler: function (cb) {
         context.onMemoryChange = function (address, value) {
           cb(address, value, context.memory.getVariable("像"));

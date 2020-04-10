@@ -1,5 +1,5 @@
 ﻿---
-layout: flowchart
+layout: stack
 ---
 
 
